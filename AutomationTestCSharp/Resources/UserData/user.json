@@ -1,0 +1,15 @@
+﻿{
+  "Username": "TestUser",
+  "Email": "testUserTest@gmail.com",
+  "Password": "password123",
+  "FirstName":"Test",
+  "LastName": "User",
+  "BirthDay" : "1999_12_12",
+  "Company": "Company",
+  "Address": "Address",
+  "Country": "United States",
+  "State": "State",
+  "City": "City",
+  "Zipcode": "12345",	
+  "MobileNumber": "11223344"	
+}
