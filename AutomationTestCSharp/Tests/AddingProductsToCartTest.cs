@@ -11,7 +11,7 @@ namespace AutomationTestCSharp.Tests
     [TestFixture]
     internal class AddingProductsToCartTest: AbstractTest
     {
-        #region Local Variables
+        #region Variables
         private HomePage _homePage;
         private ProductsPage _productsPage;
         private ViewCartPage _viewCartPage;

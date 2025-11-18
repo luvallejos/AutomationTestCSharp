@@ -10,7 +10,7 @@ namespace AutomationTestCSharp.Tests
     [TestFixture]
     internal class HomePageFilterTest : AbstractTest
     {
-        #region Local Variables
+        #region Variables
         private HomePage _homePage;
 
         #endregion

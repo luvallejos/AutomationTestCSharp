@@ -9,7 +9,7 @@ namespace AutomationTestCSharp.Tests
     [TestFixture]
     internal class ProductsSearchingTests : AbstractTest
     {
-        #region Local Variables
+        #region Variables
         private HomePage _homePage;
         private ProductsPage _productsPage;
         private ProductDetailsPage _productDetailsPage;

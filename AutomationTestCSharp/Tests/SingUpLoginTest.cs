@@ -12,7 +12,7 @@ namespace AutomationTestCSharp.Tests
     [TestFixture]
     internal class SingUpLoginTest: AbstractTest
     {
-        #region Local Variables
+        #region Variables
         private HomePage _homePage;
         private LogInPage _loginPage;
         private SignUpPage _signUpPage;

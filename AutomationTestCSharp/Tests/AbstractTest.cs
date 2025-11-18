@@ -13,7 +13,7 @@ using UITestFramework.Utilities;
 
 namespace AutomationExercise.Tests
 {
-    public class AbstractTest
+    public abstract class AbstractTest
     {
         #region Fields
         private const string _defaultProtocol = "https";
