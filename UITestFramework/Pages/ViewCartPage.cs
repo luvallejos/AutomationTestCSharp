@@ -18,15 +18,17 @@ namespace UITestFramework.Pages
         #region Properties
         public Header Header { get; private set; }
         public BreadCrumbNavigation Navigation { get; private set; }
+
+        public CartTable CartTable { get; private set; }
+
         public IWebElement CartPanel => _driver.FindElement(By.CssSelector(_cartPanelLocator));
-        public CartTable CartTable;
 
         #endregion
 
         #region Constructors
         public ViewCartPage(IWebDriver webDriver)
         {
-            this._driver = webDriver;
+            _driver = webDriver;
             Header = new Header(_driver);
             Navigation = new BreadCrumbNavigation(_driver);
             CartTable = new CartTable(_driver);

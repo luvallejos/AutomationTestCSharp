@@ -10,8 +10,8 @@ namespace UITestFramework.Pages.Common
 {
     public class CartTable
     {
-        #region Properties
-        private static IWebDriver _driver;
+        #region Constants
+        private readonly IWebDriver _driver;
         private const string _tableLocator = "#cart_info_table";
         private const string _tableRowByIndex = "tr[id='product-{0}']";
         private const string _tableRowByProductNameXpathLocator = ".//a[contains(text(),'{0}')]//ancestor::tr";
@@ -21,12 +21,14 @@ namespace UITestFramework.Pages.Common
         private const string _rowQuantityLocator = "td.cart_quantity button";
         private const string _rowTotalPriceLocator = "td.cart_total p";
         private const string _rowDeleteBtnLocator = "td.cart_delete a";
+        #endregion
 
+        #region Properties
         public List<CartTableRow> Rows { get; private set; }
         public IWebElement CartTableElement => _driver.FindElement(By.CssSelector(_tableLocator));
         #endregion
 
-        #region constructors
+        #region Constructors
         public CartTable(IWebDriver webDriver) 
         {
             _driver = webDriver;

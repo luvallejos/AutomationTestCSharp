@@ -4,10 +4,10 @@ using UITestFramework.Pages.Commons;
 
 namespace UITestFramework.Pages
 {
-    public class BasePage
+    public abstract class BasePage
     {
         #region Constants
-        public readonly IWebDriver _driver;
+        protected readonly IWebDriver _driver;
         #endregion
 
         #region Properties
@@ -18,9 +18,9 @@ namespace UITestFramework.Pages
         #endregion
 
         #region Constructors
-        public BasePage(IWebDriver webDriver)
+        protected BasePage(IWebDriver webDriver)
         {
-            this._driver = webDriver;
+            _driver = webDriver;
             Header = new Header(webDriver);
             SideBar = new SideBar(webDriver);
             FeaturedItems = new FeaturedItems(webDriver);

@@ -14,7 +14,6 @@ namespace UITestFramework.Pages.Commons
         private const string _singUpLoginBtnLocator = "#header i.fa.fa-lock";
         private const string _deleteAccountBtnLocator = "#header i.fa-trash-o";
         private const string _logOutUserBtnLocator = "#header i.fa.fa-lock";
-
         #endregion
 
         #region Properties
@@ -30,7 +29,7 @@ namespace UITestFramework.Pages.Commons
         #region Constructors
         public Header(IWebDriver webDriver)
         {
-            this._driver = webDriver;
+            _driver = webDriver;
         }
 
         #endregion

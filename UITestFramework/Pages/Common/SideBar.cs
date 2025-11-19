@@ -27,7 +27,7 @@ namespace UITestFramework.Pages.Commons
         #region Constructors
         public SideBar(IWebDriver webDriver)
         {
-            this._driver = webDriver;
+           _driver = webDriver;
         }
 
         #endregion

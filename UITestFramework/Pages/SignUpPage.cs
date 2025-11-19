@@ -30,6 +30,27 @@ namespace UITestFramework.Pages
         private const string _accountCreatedMessageLocator = "h2[data-qa='account-created']";
         private const string _continueBtnLocator = "a[data-qa='continue-button']";
 
+        private Dictionary<string, string> MonthBirthdayMapping
+        {
+            get
+            {
+                var MonthBirthdayMapping = new Dictionary<string, string>(){
+                    { "1", "January" },
+                    { "2", "February" },
+                    { "3", "March" },
+                    { "4", "April" },
+                    { "5", "May" },
+                    { "6", "June" },
+                    { "7", "July" },
+                    { "8", "August" },
+                    { "9", "September" },
+                    { "10", "October" },
+                    { "11", "November" },
+                    { "12", "December" },
+                };
+                return MonthBirthdayMapping;
+            }
+        }
         #endregion
 
         #region Properties
@@ -52,28 +73,6 @@ namespace UITestFramework.Pages
         public IWebElement CreateAccountBtn => _driver.FindElement(By.CssSelector(_createAccountBtnLocator));
         public IWebElement AccountCreatedMessage => _driver.FindElement(By.CssSelector(_accountCreatedMessageLocator));
         public IWebElement ContinueBtn => _driver.FindElement(By.CssSelector(_continueBtnLocator));
-
-        private Dictionary<string, string> MonthBirthdayMapping
-        {
-            get
-            {
-                var MonthBirthdayMapping = new Dictionary<string, string>(){
-                    { "1", "January" },
-                    { "2", "February" },
-                    { "3", "March" },
-                    { "4", "April" },
-                    { "5", "May" },
-                    { "6", "June" },
-                    { "7", "July" },
-                    { "8", "August" },
-                    { "9", "September" },
-                    { "10", "October" },
-                    { "11", "November" },
-                    { "12", "December" },
-                };
-                return MonthBirthdayMapping;
-            }
-        }
         #endregion
 
         #region Constructor

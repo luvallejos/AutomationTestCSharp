@@ -22,7 +22,7 @@ namespace UITestFramework.Pages.Commons
         #region Constructors
         public BreadCrumbNavigation(IWebDriver webDriver)
         {
-            this._driver = webDriver;
+            _driver = webDriver;
         }
         #endregion
 

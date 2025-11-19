@@ -154,7 +154,6 @@
     <Compile Include="Pages\Common\BreadCrumbNavigation.cs" />
     <Compile Include="Pages\Common\FeaturedItems.cs" />
     <Compile Include="Pages\Common\Header.cs" />
-    <Compile Include="Pages\Common\SearchProduct.cs" />
     <Compile Include="Pages\Common\SideBar.cs" />
     <Compile Include="Pages\Common\SideCarousel.cs" />
     <Compile Include="Pages\LogInPage.cs" />

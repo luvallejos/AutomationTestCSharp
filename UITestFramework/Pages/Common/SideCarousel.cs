@@ -12,8 +12,6 @@ namespace UITestFramework.Pages.Commons
         #region Constants
         private readonly IWebDriver _driver;
         private const string _carouselIndicatorsListLocator = ".carousel-indicators li";
-
-
         #endregion
 
         #region Properties
@@ -24,7 +22,7 @@ namespace UITestFramework.Pages.Commons
         #region Constructors
         public SideCarousel(IWebDriver webDriver)
         {
-            this._driver = webDriver;
+            _driver = webDriver;
         }
 
         #endregion

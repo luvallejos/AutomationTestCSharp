@@ -23,10 +23,6 @@ namespace AutomationExercise.Tests
         public const string baseURL = @"https://automationexercise.com";
         public APIClientHelper apiHelper;
         public IWebDriver driver;
-
-        #endregion
-
-        #region Properties
         #endregion
 
         #region Methods

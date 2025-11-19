@@ -21,11 +21,10 @@ namespace UITestFramework.Pages.Commons
         private const string _productListFromFeaturedItemsSectionLocator = "div.single-products";
         private const string _productElementFromFeaturedItemsSectionLocator = "div.product-image-wrapper";
         private const string _addProductToCartBtnLocator = "a[class~='add-to-cart']";
-        public BreadCrumbNavigation BreadCrumbNavigation { get; private set; }
-
         #endregion
 
         #region Properties
+        public BreadCrumbNavigation BreadCrumbNavigation { get; private set; }
         public IWebElement Title => _driver.FindElement(By.CssSelector(_titleLocator));
         public IWebElement FeaturedItemsSection => _driver.FindElement(By.CssSelector(_featuredItemsSectionLocator));
 
@@ -34,7 +33,7 @@ namespace UITestFramework.Pages.Commons
         #region Constructors
         public FeaturedItems(IWebDriver webDriver)
         {
-            this._driver = webDriver;
+            _driver = webDriver;
             BreadCrumbNavigation = new BreadCrumbNavigation(webDriver);
         }
         #endregion

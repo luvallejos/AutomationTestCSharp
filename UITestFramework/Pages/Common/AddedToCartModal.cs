@@ -21,7 +21,7 @@ namespace UITestFramework.Pages.Common
         #region Constructors
         public AddedToCartModal(IWebDriver webDriver)
         {
-            this._driver = webDriver;
+            _driver = webDriver;
         }
         #endregion
 

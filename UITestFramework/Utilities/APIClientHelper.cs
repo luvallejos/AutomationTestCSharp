@@ -12,7 +12,7 @@ namespace UITestFramework.Utilities
 {
     public class APIClientHelper
     {
-        #region Properties
+        #region Constants
         private readonly HttpClient _client;
         #endregion
 

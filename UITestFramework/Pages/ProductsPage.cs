@@ -10,7 +10,6 @@ namespace UITestFramework.Pages
         #region Constants
         private const string _searchProductsInputLocator = "#search_product";
         private const string _searchProductsSubmitBtnLocator = "#submit_search";
-
         #endregion
 
         #region Properties
