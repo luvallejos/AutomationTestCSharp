@@ -32,7 +32,7 @@ namespace UITestFramework.Pages
         #region Methods
         public void waitUntilProductDetailsPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(ProductDetailsPanel,"Products Details Page is not displayed");
+            _driver.WaitUntilDisplayed(_productDetailsPanelLocator, "Products Details Page is not displayed");
         }
 
         public Product GetProductInformationDetails()

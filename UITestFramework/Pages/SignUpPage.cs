@@ -86,7 +86,7 @@ namespace UITestFramework.Pages
         #region Methods
         public void waitUntilSignUpPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(SignUpForm, "Sign Up Page is not displayed");
+            _driver.WaitUntilDisplayed(_signUpFormLocator, "Sign Up Page is not displayed");
         }
 
         public void SignUpUser(UserData userData) 
@@ -111,9 +111,8 @@ namespace UITestFramework.Pages
             MobileNumberInput.SendKeys(userData.MobileNumber);
 
             CreateAccountBtn.Click();
-            Thread.Sleep(3000); //wait for creating account process
 
-            _driver.WaitUntilDisplayed(AccountCreatedMessage, "The account created message is not displayed.");
+            _driver.WaitUntilDisplayed(_accountCreatedMessageLocator, "The account created message is not displayed.");
             ContinueBtn.Click();
         }
 

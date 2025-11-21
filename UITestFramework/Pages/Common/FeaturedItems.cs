@@ -40,7 +40,7 @@ namespace UITestFramework.Pages.Commons
         #region Methods
         public void VerifyTitleIsDisplayed(string title)
         {
-            _driver.WaitUntilDisplayed(Title, "Title is not displayed");
+            _driver.WaitUntilDisplayed(_titleLocator, "Title is not displayed");
             ClassicAssert.IsTrue(Title.Text.ToLower().Contains(title.ToLower()), $"The featured items title is not as expected. Expected: '{title}', Actual: '{Title.Text.Trim()}'");
         }
 
@@ -93,7 +93,6 @@ namespace UITestFramework.Pages.Commons
         {
             _driver.ScrollToElement(product);
             product.FindElements(By.CssSelector(_addProductToCartBtnLocator)).First().Click();
-            Thread.Sleep(3000); //wait for modal to appear
         }
 
         public Product GetProductDataFromFeaturedItemsList(IWebElement productElement)

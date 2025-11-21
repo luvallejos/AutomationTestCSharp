@@ -28,7 +28,7 @@ namespace UITestFramework.Pages
         #region Methods
         public void waitUntilHomePageDisplayed() 
         {
-            _driver.WaitUntilDisplayed(SliderCarrousel, "Home Page is not displayed");
+            _driver.WaitUntilDisplayed(_sliderCarrouselLocator, "Home Page is not displayed");
         }
 
         #endregion

@@ -60,7 +60,6 @@ namespace UITestFramework.Pages.Commons
                 //if the panel is collapsed and action is expand, click to expand
                 _driver.ScrollToElement(filterToSelect);
                 filterToSelect.Click();
-                Thread.Sleep(3000); //wait for filter to be applied
                 FeaturedItems featuredItemsSection = new FeaturedItems(_driver);
                 _driver.WaitUntilDisplayed(featuredItemsSection.FeaturedItemsSection, "Failed loading featured Items section.");
             }
@@ -135,7 +134,6 @@ namespace UITestFramework.Pages.Commons
             {
                 _driver.ScrollToElement(subcat);
                 subcat.Click();
-                Thread.Sleep(3000); //wait for filter to be applied
                 FeaturedItems featuredItemsSection = new FeaturedItems(_driver);
                 _driver.WaitUntilDisplayed(featuredItemsSection.FeaturedItemsSection, "Failed loading featured Items section.");
             }

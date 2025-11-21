@@ -27,7 +27,7 @@ namespace UITestFramework.Pages
         #region Methods
         public void waitUntilProductsPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(SearchProductsTextBox, "Product Page is not displayed");
+            _driver.WaitUntilDisplayed(_searchProductsInputLocator, "Product Page is not displayed");
         }
 
         public void SearchProduct(string input)

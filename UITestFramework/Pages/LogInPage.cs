@@ -39,7 +39,7 @@ namespace UITestFramework.Pages
         #region Methods
         public void waitUntilLoginPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(LoginPanel, "Login Page is not displayed");
+            _driver.WaitUntilDisplayed(_loginPanelLocator, "Login Page is not displayed");
         }
 
         public void Login(string email, string password)
@@ -49,7 +49,6 @@ namespace UITestFramework.Pages
             LoginPasswordInput.Clear();
             LoginPasswordInput.SendKeys(password);
             LoginBtn.Click();
-            Thread.Sleep(3000); //wait for login process
         }
 
         public void IsLoginSuccessfull()
@@ -70,7 +69,6 @@ namespace UITestFramework.Pages
             SignUpEmailInput.Clear();
             SignUpEmailInput.SendKeys(email);
             SignUpBtn.Click();
-            Thread.Sleep(3000); //wait for Sign Up Page to load 
             SignUpPage signUpPage = new SignUpPage(_driver);
             signUpPage.waitUntilSignUpPageDisplayed();
             return signUpPage;

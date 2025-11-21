@@ -30,7 +30,7 @@ namespace UITestFramework.Pages.Common
         {
             try
             {
-                _driver.WaitUntilDisplayed(CartModal, "Added to cart modal is not displayed");
+                _driver.WaitUntilDisplayed(_cartModalDisplayedLocator, "Added to cart modal is not displayed");
                 return CartModal.Displayed;
             }
             catch (NoSuchElementException)

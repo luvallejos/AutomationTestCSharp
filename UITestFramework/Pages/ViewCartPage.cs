@@ -37,7 +37,7 @@ namespace UITestFramework.Pages
         #region Methods
         public void waitUntilViewCartPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(CartPanel, "View Cart Page is not displayed");
+            _driver.WaitUntilDisplayed(_cartPanelLocator, "View Cart Page is not displayed");
         }
 
         public List<Product> GetAllProductsInCart() { 
