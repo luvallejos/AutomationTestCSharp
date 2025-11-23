@@ -5,6 +5,7 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -81,6 +82,8 @@ namespace AutomationExercise.Tests
             options.AddArgument("--disable-infobars"); // disabling infobars
 
             driver = new ChromeDriver(options);
+            driver.Manage().Window.Size = new Size(1920, 1080);
+            driver.RemoveAds();
 
             //Navigate to Base Url
             driver.Navigate().GoToUrl(url);
