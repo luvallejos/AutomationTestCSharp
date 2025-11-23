@@ -53,7 +53,7 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'VSTest'
-    testResultsFiles: '$(Build.ArtifactStagingDirectory)/*.trx'
+    testResultsFiles: '$(Agent.TempDirectory)/TestResults/*.trx'
 
     
 - task: PublishBuildArtifacts@1
@@ -75,7 +75,7 @@ steps:
       $outDir = "$(Build.ArtifactStagingDirectory)"
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
-      $trxPath = "$(Build.ArtifactStagingDirectory)"
+      $trxPath = "$(Agent.TempDirectory)\TestResults\"
 
       $tempFolder = Join-Path $artifactRoot "TestResultsStaging"
       if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
