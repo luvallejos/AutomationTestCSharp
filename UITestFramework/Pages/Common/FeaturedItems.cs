@@ -92,7 +92,8 @@ namespace UITestFramework.Pages.Commons
         public void AddToCartAProduct(IWebElement product)
         {
             _driver.ScrollToElement(product);
-            product.FindElements(By.CssSelector(_addProductToCartBtnLocator)).First().Click();
+            _driver.HoverElement(product);
+            product.FindElements(By.CssSelector(_addProductToCartBtnLocator)).Last().Click();
         }
 
         public Product GetProductDataFromFeaturedItemsList(IWebElement productElement)

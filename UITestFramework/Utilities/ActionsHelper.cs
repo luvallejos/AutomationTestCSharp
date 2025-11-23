@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace UITestFramework.Utilities
 {
@@ -7,6 +8,12 @@ namespace UITestFramework.Utilities
         public static void ScrollToElement(this IWebDriver driver, IWebElement element)
         {
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+        }
+
+        public static void HoverElement(this IWebDriver driver, IWebElement element)
+        {
+            var actions = new Actions(driver);
+            actions.MoveToElement(element).Perform();
         }
 
         public static void RemoveAds(this IWebDriver driver)
