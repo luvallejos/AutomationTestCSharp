@@ -77,19 +77,25 @@ steps:
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
       $trxPath = "$(Build.ArtifactStagingDirectory)"
 
-      $tempFolder = Join-Path $outDir "TestResults"
+      $tempFolder = Join-Path $artifactRoot "TestResultsStaging"
+      if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
       New-Item -ItemType Directory -Force -Path $tempFolder | Out-Null
 
-      if (Test-Path $screenshotsPath) {
-        Copy-Item "$screenshotsPath\*" $tempFolder -Recurse -Force
+       if (Test-Path $screenshotsPath) {
+        $destScreens = Join-Path $tempFolder "Screenshots"
+        New-Item -ItemType Directory -Force -Path $destScreens | Out-Null
+        Copy-Item "$screenshotsPath\*" $destScreens -Recurse -Force
       }
 
       if (Test-Path $trxPath) {
-        Copy-Item "$trxPath\*" $tempFolder -Recurse -Force
+        $destTrx = Join-Path $tempFolder "Trx"
+        New-Item -ItemType Directory -Force -Path $destTrx | Out-Null
+        Copy-Item "$trxPath\*" $destTrx -Recurse -Force
       }
 
       $zipFile = Join-Path $outDir "TestResults_$(Build.BuildId).zip"
       if (Test-Path $zipFile) { Remove-Item $zipFile -Force }
+      
       Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
       [System.IO.Compression.ZipFile]::CreateFromDirectory($tempFolder, $zipFile)
 
