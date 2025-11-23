@@ -33,6 +33,7 @@ namespace UITestFramework.Pages
         public void SearchProduct(string input)
         {
             SearchProductsTextBox.SendKeys(input);
+            _driver.ScrollToElement(SearchProductsSubmitBtn);
             SearchProductsSubmitBtn.Click();
             FeaturedItems.VerifyTitleIsDisplayed("Searched Products");
         }
