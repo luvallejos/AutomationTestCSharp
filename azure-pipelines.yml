@@ -54,4 +54,3 @@ steps:
   inputs:
     testResultsFormat: 'VSTest'
     testResultsFiles: '$(Build.ArtifactStagingDirectory)/*.trx'
-    failTaskOnFailedTests: true

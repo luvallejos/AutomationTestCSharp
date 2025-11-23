@@ -80,9 +80,7 @@ namespace AutomationExercise.Tests
             options.AddArgument("--start-maximized"); // open browser in maximized mode
             options.AddArgument("--disable-infobars"); // disabling infobars
 
-
-            string ChromeDriver = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            driver = new ChromeDriver(ChromeDriver, options);
+            driver = new ChromeDriver(options);
 
             //Navigate to Base Url
             driver.Navigate().GoToUrl(url);
