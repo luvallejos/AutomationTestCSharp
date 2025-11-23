@@ -32,6 +32,7 @@ namespace UITestFramework.Pages
 
         public void SearchProduct(string input)
         {
+            _driver.ScrollToElement(SearchProductsTextBox);
             SearchProductsTextBox.SendKeys(input);
             _driver.ScrollToElement(SearchProductsSubmitBtn);
             SearchProductsSubmitBtn.Click();
