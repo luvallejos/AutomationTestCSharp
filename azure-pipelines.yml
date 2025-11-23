@@ -73,6 +73,7 @@ steps:
       $buildConfig = "$(buildConfiguration)"
       $src = "$(Build.SourcesDirectory)"
       $outDir = "$(Build.ArtifactStagingDirectory)"
+      $artifactRoot = "$(Build.ArtifactStagingDirectory)"
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
       $trxPath = "$(Agent.TempDirectory)\TestResults\"
