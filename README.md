@@ -14,6 +14,8 @@ It includes a full suite of UI tests, along with a set of API request helpers us
 
 The framework follows the Page Object Model (POM) methodology, ensuring a clean structure, easy maintenance, and high scalability as the project expands.
 
+---
+
 <a name="technologies"></a>
 ## 🔧 Technologies and tools used in this project:
 
@@ -31,6 +33,8 @@ Lightweight API requests implemented as helpers to support UI scenarios.
 
 Used to prepare test data, validate backend states, and ensure tests remain stable and reliable.
 
+---
+
 <a name="framework"></a>
 
 ## 📦 Framework Architecture
@@ -40,6 +44,8 @@ Used to prepare test data, validate backend states, and ensure tests remain stab
 Encapsulates page elements, user actions, and business logic to improve reusability and maintainability.
 
 Clear separation between page objects, test classes, and API utilities, making the framework scalable and easy to extend.
+
+---
 
 ### 📁 Project Structure
 
@@ -55,3 +61,35 @@ Clear separation between page objects, test classes, and API utilities, making t
 ├── 📁 Utilities/          # Custom helpers, extensions, and common methods
 └── 📄 README.md           # Documentation file
 ```
+---
+
+## 🚀 Continuous Integration (CI/CD) with Azure DevOps
+
+This project includes a fully configured **Azure DevOps pipeline** that runs automatically on every push to the repository.
+
+The pipeline performs the following steps:
+
+- ✔️ Restore dependencies  
+- ✔️ Build the project  
+- ✔️ Execute all automated tests  
+- ✔️ Capture screenshots for failed tests  
+- ✔️ Generate test result files (`.trx`, logs, etc.)  
+- ✔️ Publish the results to GitHub Releases  
+
+Even though the pipeline itself is private, the test execution results are **automatically uploaded and publicly accessible**.
+
+---
+
+## 📦 Public Test Execution Results (GitHub Releases)
+
+The latest test results can be found here:
+
+👉 **GitHub Releases** → `Test Results`
+
+Each pipeline run uploads a ZIP file containing:
+
+- 📁 Screenshots of failed tests  
+- 📄 `.trx` test result files  
+- 📊 Additional logs/evidence generated during the run  
+
+This allows anyone to review the test outcomes without needing access to Azure DevOps.
