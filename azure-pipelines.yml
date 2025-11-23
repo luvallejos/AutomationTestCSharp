@@ -54,3 +54,11 @@ steps:
   inputs:
     testResultsFormat: 'VSTest'
     testResultsFiles: '$(Build.ArtifactStagingDirectory)/*.trx'
+    
+ - task: PublishBuildArtifacts@1
+  displayName: 'Publish screenshots'
+  condition: always() 
+  inputs:
+    PathtoPublish: '$(Build.SourcesDirectory)/AutomationTestCSharp/bin/$(buildConfiguration)/Screenshots'
+    ArtifactName: 'Screenshots'
+    publishLocation: 'Container'

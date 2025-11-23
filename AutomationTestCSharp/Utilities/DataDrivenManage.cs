@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using ExcelDataReader;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Data.OleDb;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace AutomationTestCSharp.Utilities
 {
@@ -19,7 +21,7 @@ namespace AutomationTestCSharp.Utilities
                 {
                     if(sourceElement.Name == testSourceName)
                     {
-                        _dataRow = ToList(GetData(sourceElement.ConnectionString, sourceElement.Query), sourceElement.RowIndexes);
+                        _dataRow = ToList(GetData(sourceElement.FilePath, sourceElement.SheetName), sourceElement.RowIndexes);
                     }
                 }
             }
@@ -27,35 +29,24 @@ namespace AutomationTestCSharp.Utilities
             return _dataRow;
         }
 
-        private DataTable GetData(string connectionString, string queryCommand = null)
+        private DataTable GetData(string filePath, string sheetName)
         {
-            var dt = new DataTable();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            using (var connection = new OleDbConnection())
+            var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
+            var reader = ExcelReaderFactory.CreateReader(stream);
+
+            var conf = new ExcelDataSetConfiguration
             {
-                connection.ConnectionString = connectionString;
-
-                connection.Open();
-
-                if (string.IsNullOrEmpty(queryCommand))
+                ConfigureDataTable = _ => new ExcelDataTableConfiguration
                 {
-                    var dtsheet = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                    var excelSheetName = dtsheet?.Rows[0]["Table_Name"].ToString();
-                    if (!string.IsNullOrEmpty(excelSheetName))
-                    {
-                        queryCommand = $"select * from [{excelSheetName}]";
-                    }
+                    UseHeaderRow = true   // si la primera fila son los nombres de columnas
                 }
+            };
 
-                var command = new OleDbCommand(queryCommand, connection);
-                using (var da = new OleDbDataAdapter())
-                {
-                    da.SelectCommand = command;
-                    da.Fill(dt);
-                }
-            }
+            var dataSet = reader.AsDataSet(conf);
 
-            return dt;
+            return dataSet.Tables[sheetName];
         }
 
         private IEnumerable<Dictionary<string, object>> ToList(DataTable table, IEnumerable<int> rowIndexes)

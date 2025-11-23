@@ -1,4 +1,5 @@
 # Automation Exercise Project
+[![Build Status](https://dev.azure.com/lucia-qa-automation/AutomationProjectCSharp/_apis/build/status%2Fluvallejos.AutomationTestCSharp?branchName=master)](https://dev.azure.com/lucia-qa-automation/AutomationProjectCSharp/_build/latest?definitionId=1&branchName=master)
 
 ## 📄 Table of Contents
 1. [Introduction](#introduction)

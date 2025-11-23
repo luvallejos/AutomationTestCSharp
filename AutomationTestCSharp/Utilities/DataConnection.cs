@@ -40,18 +40,18 @@ namespace AutomationTestCSharp.Utilities
             set { this["Name"] = value; }
         }
 
-        [ConfigurationProperty("ConnectionString", IsRequired = true)]
-        public string ConnectionString
+        [ConfigurationProperty("FilePath", IsRequired = true)]
+        public string FilePath
         {
-            get { return (string)this["ConnectionString"]; }
-            set { this["ConnectionString"] = value; }
+            get { return (string)this["FilePath"]; }
+            set { this["FilePath"] = value; }
         }
 
-        [ConfigurationProperty("Query", IsRequired = true)]
-        public string Query
+        [ConfigurationProperty("SheetName", IsRequired = true)]
+        public string SheetName
         {
-            get { return (string)this["Query"]; }
-            set { this["Query"] = value; }
+            get { return (string)this["SheetName"]; }
+            set { this["SheetName"] = value; }
         }
 
         [ConfigurationProperty("RowIndexes")]
