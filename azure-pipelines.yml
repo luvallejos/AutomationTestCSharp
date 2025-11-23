@@ -54,8 +54,9 @@ steps:
   inputs:
     testResultsFormat: 'VSTest'
     testResultsFiles: '$(Build.ArtifactStagingDirectory)/*.trx'
+
     
- - task: PublishBuildArtifacts@1
+- task: PublishBuildArtifacts@1
   displayName: 'Publish screenshots'
   condition: always() 
   inputs:
