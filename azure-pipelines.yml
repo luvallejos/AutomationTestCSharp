@@ -8,21 +8,47 @@ trigger:
 
 pool:
   vmImage: 'windows-latest'
+  
+variables:
+  solution: 'AutomationTestCSharp.sln' 
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
 steps:
-- task: UseDotNet@2
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
   inputs:
-    packageType: 'sdk'
-    version: '8.0.x'
+    command: 'restore'
+    restoreSolution: '$(solution)'
+    feedsToUse: 'select'
+    includeNuGetOrg: true 
 
-- script: dotnet restore
-  displayName: 'Restore packages'
+- task: VSBuild@1
+  displayName: 'Build solution'
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:Configuration=$(buildConfiguration)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    clean: true
 
-- script: dotnet build --configuration Release
-  displayName: 'Build the project'
-
-- script: dotnet test --configuration Release --logger "trx;LogFileName=test_results.trx" --results-directory "$(Build.ArtifactStagingDirectory)"
+- task: VSTest@2
   displayName: 'Run tests'
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      **\*Test.dll
+      **\*Tests.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    vsTestVersion: 'latest'
+    runInParallel: true
+    codeCoverageEnabled: false      
 
 - task: PublishTestResults@2
   inputs:
