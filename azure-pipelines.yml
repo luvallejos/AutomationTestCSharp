@@ -63,3 +63,71 @@ steps:
     PathtoPublish: '$(Build.SourcesDirectory)/AutomationTestCSharp/bin/$(buildConfiguration)/Screenshots'
     ArtifactName: 'Screenshots'
     publishLocation: 'Container'
+    
+- task: PowerShell@2
+  displayName: 'Create result tests package'
+  condition: always()  
+  inputs:
+    targetType: 'inline'
+    script: |
+      $buildConfig = "$(buildConfiguration)"
+      $src = "$(Build.SourcesDirectory)"
+      $outDir = "$(Build.ArtifactStagingDirectory)"
+      
+      $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
+      $trxPath = "$(Build.ArtifactStagingDirectory)"
+
+      $tempFolder = Join-Path $outDir "TestResults"
+      New-Item -ItemType Directory -Force -Path $tempFolder | Out-Null
+
+      if (Test-Path $screenshotsPath) {
+        Copy-Item "$screenshotsPath\*" $tempFolder -Recurse -Force
+      }
+
+      if (Test-Path $trxPath) {
+        Copy-Item "$trxPath\*" $tempFolder -Recurse -Force
+      }
+
+      $zipFile = Join-Path $outDir "TestResults_$(Build.BuildId).zip"
+      if (Test-Path $zipFile) { Remove-Item $zipFile -Force }
+      Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
+      [System.IO.Compression.ZipFile]::CreateFromDirectory($tempFolder, $zipFile)
+
+      Write-Host "##vso[task.setvariable variable=TEST_RESULTS_ZIP]$zipFile"
+ 
+- task: PowerShell@2
+  displayName: 'Upload results to GitHub Release'
+  condition: always()
+  inputs:
+    targetType: 'inline'
+    script: |
+      $owner = "$(GITHUB_OWNER)"
+      $repo  = "$(GITHUB_REPO)"
+      $token = "$(GITHUB_TOKEN)"
+      $tag   = "test-results"
+
+      $zipPath = "$(TEST_RESULTS_ZIP)"
+      if (-not (Test-Path $zipPath)) {
+        Write-Host "Zip of results not found: $zipPath"
+        exit 0
+      }
+
+      $headers = @{ Authorization = "token $token" }
+
+      $releaseUrl = "https://api.github.com/repos/$owner/$repo/releases/tags/$tag"
+      $release = Invoke-RestMethod -Uri $releaseUrl -Headers $headers -Method Get
+
+      $releaseId = $release.id
+      Write-Host "Release id: $releaseId"
+
+      $fileName = [System.IO.Path]::GetFileName($zipPath)
+      $uploadUrl = "https://uploads.github.com/repos/$owner/$repo/releases/$releaseId/assets?name=$fileName"
+
+      $contentType = "application/zip"
+      $bytes = [System.IO.File]::ReadAllBytes($zipPath)
+
+      Invoke-RestMethod -Uri $uploadUrl -Headers $headers -Method Post -ContentType $contentType -Body $bytes
+
+      Write-Host "Results uploaded as asset: $fileName"
+  env:
+    GITHUB_TOKEN: $(GITHUB_TOKEN)
