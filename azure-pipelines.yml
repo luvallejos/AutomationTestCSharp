@@ -73,12 +73,11 @@ steps:
       $buildConfig = "$(buildConfiguration)"
       $src = "$(Build.SourcesDirectory)"
       $outDir = "$(Build.ArtifactStagingDirectory)"
-      $artifactRoot = "$(Build.ArtifactStagingDirectory)"
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
       $trxPath = "$(Agent.TempDirectory)\TestResults\"
 
-      $tempFolder = Join-Path $artifactRoot "TestResultsStaging"
+      $tempFolder = Join-Path $outDir "TestResultsStaging"
       if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
       New-Item -ItemType Directory -Force -Path $tempFolder | Out-Null
 
