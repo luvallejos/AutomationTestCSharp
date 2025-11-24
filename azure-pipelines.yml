@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
@@ -48,13 +43,44 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)'
     vsTestVersion: 'latest'
     runInParallel: true
-    codeCoverageEnabled: false      
+    codeCoverageEnabled: false         
 
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'VSTest'
+    condition: always()
     testResultsFiles: '$(Agent.TempDirectory)/TestResults/*.trx'
 
+- task: DotNetCoreCLI@2
+  displayName: 'Install ReportGenerator'
+  inputs:
+    command: 'tool'
+    custom: 'install'
+    arguments: '--global dotnet-reportgenerator-globaltool'  
+
+- task: PowerShell@2
+  displayName: "Generate HTML Test Report"
+  condition: always()
+  inputs:
+    targetType: inline
+    script: |
+      $trxPath = "$(Build.ArtifactStagingDirectory)"
+      $reportPath = "$(Build.ArtifactStagingDirectory)/HtmlReport"
+
+      reportgenerator `
+        "-reports:$trxPath/*.trx" `
+        "-targetdir:$reportPath" `
+        "-reporttypes:Html;HtmlSummary"
+
+      Write-Host "Report generated in: $reportPath"
+      
+- task: PublishBuildArtifacts@1
+  displayName: "Publish HTML Test Report"
+  condition: always()
+  inputs:
+    PathtoPublish: "$(Build.ArtifactStagingDirectory)/HtmlReport"
+    ArtifactName: "HtmlTestReport"
+    publishLocation: "Container"    
     
 - task: PublishBuildArtifacts@1
   displayName: 'Publish screenshots'
@@ -76,6 +102,7 @@ steps:
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
       $trxPath = "$(Agent.TempDirectory)\TestResults\"
+      $htmlReportPath  = "$(Build.ArtifactStagingDirectory)\HtmlReport"
 
       $tempFolder = Join-Path $outDir "TestResultsStaging"
       if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
@@ -92,6 +119,11 @@ steps:
         New-Item -ItemType Directory -Force -Path $destTrx | Out-Null
         Copy-Item "$trxPath\*" $destTrx -Recurse -Force
       }
+      
+      if (Test-Path $htmlReportPath) {
+        $destHtml = Join-Path $tempFolder "HtmlReport"
+        Copy-Item "$htmlReportPath\*" $destHtml -Recurse -Force
+      }
 
       $zipFile = Join-Path $outDir "TestResults_$(Build.BuildId).zip"
       if (Test-Path $zipFile) { Remove-Item $zipFile -Force }
@@ -100,6 +132,7 @@ steps:
       [System.IO.Compression.ZipFile]::CreateFromDirectory($tempFolder, $zipFile)
 
       Write-Host "##vso[task.setvariable variable=TEST_RESULTS_ZIP]$zipFile"
+      Write-Host "Created zip: $zipFile"
  
 - task: PowerShell@2
   displayName: 'Upload results to GitHub Release'
