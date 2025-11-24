@@ -60,12 +60,12 @@ steps:
     condition: always()
     testResultsFiles: '$(Agent.TempDirectory)/TestResults/*.trx'
 
-- task: NuGetCommand@2
-  displayName: "Download TrxToExtentReport"
-  condition: always()
+- task: DotNetCoreCLI@2
+  displayName: 'Install TrxToExtentReport tool'
   inputs:
-    command: custom
-    arguments: "install TrxToExtentReport -Version 0.0.4 -OutputDirectory $(Agent.ToolsDirectory)"
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install TrxToExtentReport --version 0.0.4 --tool-path "$(Agent.TempDirectory)\trx-tool"' 
  
 - task: PowerShell@2
   displayName: "Generate HTML Test Report"
@@ -73,29 +73,23 @@ steps:
   inputs:
     targetType: inline
     script: |
-      $cli = Get-ChildItem "$(Agent.ToolsDirectory)" -Recurse -Filter "TrxToExtentReport.exe" | Select-Object -First 1
+      $tool = "$(Agent.TempDirectory)\trx-tool\TrxToExtentReport.exe"
+      $input = "$(Agent.TempDirectory)\TestResults"
+      $output = "$(Build.SourcesDirectory)\ExtentReport"
 
-      if (-not $cli) {
-        Write-Error "extent.exe not found"
-        exit 1
-      }
-
-      $input  = "$(Agent.TempDirectory)\TestResults"
-      $output = "$(Build.ArtifactStagingDirectory)\TrxToExtentReport\report.html"
+      Write-Host "Using tool: $tool"
+      Write-Host "Input folder: $input"
+      Write-Host "Output folder: $output"
 
       New-Item -ItemType Directory -Force -Path $output | Out-Null
 
-      Write-Host "Input folder: $input"
-      Write-Host "Output folder: $output"
-      Write-Host "Using: $($cli.FullName)"
-
-      & $cli.FullName -d $input -o $output
-
+      & $tool -d $input -o $output
+    
       if ($LASTEXITCODE -ne 0) {
         Write-Error "TrxToExtentReport failed with code $LASTEXITCODE"
         exit $LASTEXITCODE
       }
-      
+    
 - task: PublishBuildArtifacts@1
   displayName: "Publish HTML Report"
   condition: always()
