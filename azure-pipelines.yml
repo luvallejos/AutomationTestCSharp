@@ -44,7 +44,15 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)'
     vsTestVersion: 'latest'
     runInParallel: true
-    codeCoverageEnabled: false         
+    codeCoverageEnabled: false
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish screenshots'
+  condition: failed()
+  inputs:
+    PathtoPublish: '$(Build.SourcesDirectory)/AutomationTestCSharp/bin/$(buildConfiguration)/Screenshots'
+    ArtifactName: 'Screenshots'
+    publishLocation: 'Container'    
 
 - task: PublishTestResults@2
   inputs:
@@ -105,15 +113,7 @@ steps:
     PathtoPublish: "$(Build.ArtifactStagingDirectory)/HtmlReport"
     ArtifactName: "HtmlTestReport"
     publishLocation: "Container"    
-    
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish screenshots'
-  condition: failed('RunTests')
-  inputs:
-    PathtoPublish: '$(Build.SourcesDirectory)/AutomationTestCSharp/bin/$(buildConfiguration)/Screenshots'
-    ArtifactName: 'Screenshots'
-    publishLocation: 'Container'
-    
+        
 - task: PowerShell@2
   displayName: 'Create result tests package'
   condition: always()  
