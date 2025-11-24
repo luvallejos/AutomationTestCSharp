@@ -65,7 +65,7 @@ steps:
   condition: always()
   inputs:
     command: custom
-    arguments: "install Extent.Standalone.NET.CLI -OutputDirectory $(Agent.ToolsDirectory)"
+    arguments: "install extent -Version 0.0.3 -OutputDirectory $(Agent.ToolsDirectory)"
  
 - task: PowerShell@2
   displayName: "Generate HTML Test Report (Extent CLI)"
@@ -73,16 +73,15 @@ steps:
   inputs:
     targetType: inline
     script: |
-      # Buscar el ejecutable
-      $cli = Get-ChildItem "$(Agent.ToolsDirectory)" -Recurse -Filter "extentcli.exe" | Select-Object -First 1
+      $cli = Get-ChildItem "$(Agent.ToolsDirectory)" -Recurse -Filter "extent.exe" | Select-Object -First 1
 
       if (-not $cli) {
-        Write-Error "extentcli.exe not found"
+        Write-Error "extent.exe not found"
         exit 1
       }
 
       $input  = "$(Agent.TempDirectory)\TestResults"
-      $output = "$(Build.ArtifactStagingDirectory)\HtmlReport"
+      $output = "$(Build.ArtifactStagingDirectory)\ExtentReport"
 
       New-Item -ItemType Directory -Force -Path $output | Out-Null
 
@@ -90,10 +89,10 @@ steps:
       Write-Host "Output folder: $output"
       Write-Host "Using: $($cli.FullName)"
 
-      & $cli.FullName transform --in "$input" --out "$output"
+      & $cli.FullName -d $input -o $output -r v3html --merge
 
       if ($LASTEXITCODE -ne 0) {
-        Write-Error "Extent CLI failed with code $LASTEXITCODE"
+        Write-Error "Extent failed with code $LASTEXITCODE"
         exit $LASTEXITCODE
       }
       
