@@ -98,7 +98,7 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: "Publish HTML Report"
   inputs:
-    PathtoPublish: "$(Build.ArtifactStagingDirectory)\HtmlReport"
+    PathtoPublish: "$(Build.ArtifactStagingDirectory)/HtmlReport"
     ArtifactName: "HtmlTestReport"
     publishLocation: Container
       
