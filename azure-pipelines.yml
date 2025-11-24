@@ -30,21 +30,16 @@ steps:
     configuration: '$(buildConfiguration)'
     clean: true
 
-- task: VSTest@2
+- task: DotNetCoreCLI@2
   displayName: 'Run tests'
-  name: RunTests
   inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: |
-      **\*test*.dll
-      **\*Test.dll
-      **\*Tests.dll
-      !**\*TestAdapter.dll
-      !**\obj\**
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    vsTestVersion: 'latest'
-    runInParallel: true
-    codeCoverageEnabled: false
+    command: 'test'
+    projects: '**/*Tests.csproj'
+    arguments: >
+      --configuration $(BuildConfiguration)
+      --logger "trx;LogFileName=tests.trx"
+      --results-directory "$(Agent.TempDirectory)\TestResults"
+      -- NUnit.TestOutputXml="$(Agent.TempDirectory)\TestResults"
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish screenshots'
