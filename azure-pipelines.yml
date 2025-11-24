@@ -114,7 +114,7 @@ steps:
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
       $trxPath = "$(Agent.TempDirectory)\TestResults\"
-      $htmlReportPath  = "$(Agent.TempDirectory)\ExtentReport"
+      $htmlReportPath  = "$(Agent.TempDirectory)\ExtentReport\"
 
       $tempFolder = Join-Path $outDir "TestResultsStaging"
       if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
@@ -133,7 +133,7 @@ steps:
       }
       
       if (Test-Path $htmlReportPath) {
-        $destHtml = Join-Path $tempFolder "HtmlReport"
+        $destHtml = Join-Path $tempFolder "HtmlTestReport"
         Copy-Item "$htmlReportPath\*" $destHtml -Recurse -Force
       }
 
