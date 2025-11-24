@@ -76,15 +76,18 @@ steps:
     script: |
       $tool = "$(Agent.TempDirectory)\trx-tool\TrxToExtentReport.exe"
       $input = "$(Agent.TempDirectory)\TestResults"
-      $output = "$(Agent.TempDirectory)\trx-tool\report.html"
+      $outputDir = "$(Agent.TempDirectory)\ExtentReport"
 
       Write-Host "Using tool: $tool"
       Write-Host "Input folder: $input"
       Write-Host "Output folder: $output"
 
-      New-Item -ItemType Directory -Force -Path $output | Out-Null
+      New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
 
-      & $tool -d $input -o $output
+      $outputFile = Join-Path $outputDir "report.html"
+      Write-Host "Output file: $outputFile"
+
+      & $tool -d $input -o $outputFile
     
       if ($LASTEXITCODE -ne 0) {
         Write-Error "TrxToExtentReport failed with code $LASTEXITCODE"
@@ -95,7 +98,7 @@ steps:
   displayName: "Publish HTML Report"
   condition: always()
   inputs:
-    PathtoPublish: "$(Agent.TempDirectory)/trx-tool"
+    PathtoPublish: "$(Agent.TempDirectory)/ExtentReport"
     ArtifactName: "HtmlTestReport"
     publishLocation: Container
       
@@ -111,7 +114,7 @@ steps:
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
       $trxPath = "$(Agent.TempDirectory)\TestResults\"
-      $htmlReportPath  = "$(Agent.TempDirectory)\trx-tool"
+      $htmlReportPath  = "$(Agent.TempDirectory)\ExtentReport"
 
       $tempFolder = Join-Path $outDir "TestResultsStaging"
       if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
