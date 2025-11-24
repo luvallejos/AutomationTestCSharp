@@ -80,16 +80,19 @@ Even though the pipeline itself is private, the test execution results are **aut
 
 ---
 
-## 📦 Public Test Execution Results (GitHub Releases)
+## 📊 Test Execution Report (GitHub Releases)
 
-The latest test results can be found here:
+You can download and view the latest automated test execution results here:
 
-👉 **GitHub Releases** → `Test Results`
+👉 **[Latest Test Report (HTML)](https://github.com/luvallejos/AutomationTestCSharp/releases/latest)**
 
 Each pipeline run uploads a ZIP file containing:
 
 - 📁 Screenshots of failed tests  
 - 📄 `.trx` test result files  
 - 📊 Additional logs/evidence generated during the run  
-
-This allows anyone to review the test outcomes without needing access to Azure DevOps.
+- 📊 The test report which includes: 
+    - Pass/Fail summary  
+    - Execution time  
+    - Error stack traces  
+    - Per-test details 
