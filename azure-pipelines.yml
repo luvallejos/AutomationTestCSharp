@@ -62,12 +62,14 @@ steps:
 
 - task: NuGetCommand@2
   displayName: "Download Extent .NET CLI"
+  condition: always()
   inputs:
     command: custom
     arguments: "install Extent.Standalone.NET.CLI -OutputDirectory $(Agent.ToolsDirectory)"
  
 - task: PowerShell@2
   displayName: "Generate HTML Test Report (Extent CLI)"
+  condition: always()
   inputs:
     targetType: inline
     script: |
@@ -97,6 +99,7 @@ steps:
       
 - task: PublishBuildArtifacts@1
   displayName: "Publish HTML Report"
+  condition: always()
   inputs:
     PathtoPublish: "$(Build.ArtifactStagingDirectory)/HtmlReport"
     ArtifactName: "HtmlTestReport"
