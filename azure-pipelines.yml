@@ -76,7 +76,7 @@ steps:
     script: |
       $tool = "$(Agent.TempDirectory)\trx-tool\TrxToExtentReport.exe"
       $input = "$(Agent.TempDirectory)\TestResults"
-      $output = "$(Build.ArtifactStagingDirectory)\ExtentReport\report.html"
+      $output = "$(Agent.TempDirectory)\trx-tool\report.html"
 
       Write-Host "Using tool: $tool"
       Write-Host "Input folder: $input"
@@ -95,7 +95,7 @@ steps:
   displayName: "Publish HTML Report"
   condition: always()
   inputs:
-    PathtoPublish: "$(Build.ArtifactStagingDirectory)/ExtentReport"
+    PathtoPublish: "$(Agent.TempDirectory)/trx-tool"
     ArtifactName: "HtmlTestReport"
     publishLocation: Container
       
@@ -111,7 +111,7 @@ steps:
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
       $trxPath = "$(Agent.TempDirectory)\TestResults\"
-      $htmlReportPath  = "$(Build.ArtifactStagingDirectory)\ExtentReport"
+      $htmlReportPath  = "$(Agent.TempDirectory)\trx-tool"
 
       $tempFolder = Join-Path $outDir "TestResultsStaging"
       if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
