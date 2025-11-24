@@ -62,6 +62,7 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: 'Install TrxToExtentReport tool'
+  condition: always()
   inputs:
     command: 'custom'
     custom: 'tool'
@@ -75,7 +76,7 @@ steps:
     script: |
       $tool = "$(Agent.TempDirectory)\trx-tool\TrxToExtentReport.exe"
       $input = "$(Agent.TempDirectory)\TestResults"
-      $output = "$(Build.SourcesDirectory)\ExtentReport"
+      $output = "$(Build.ArtifactStagingDirectory)\ExtentReport\report.html"
 
       Write-Host "Using tool: $tool"
       Write-Host "Input folder: $input"
@@ -94,7 +95,7 @@ steps:
   displayName: "Publish HTML Report"
   condition: always()
   inputs:
-    PathtoPublish: "$(Build.ArtifactStagingDirectory)/TrxToExtentReport"
+    PathtoPublish: "$(Build.ArtifactStagingDirectory)/ExtentReport"
     ArtifactName: "HtmlTestReport"
     publishLocation: Container
       
@@ -110,7 +111,7 @@ steps:
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
       $trxPath = "$(Agent.TempDirectory)\TestResults\"
-      $htmlReportPath  = "$(Build.ArtifactStagingDirectory)\TrxToExtentReport"
+      $htmlReportPath  = "$(Build.ArtifactStagingDirectory)\ExtentReport"
 
       $tempFolder = Join-Path $outDir "TestResultsStaging"
       if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
