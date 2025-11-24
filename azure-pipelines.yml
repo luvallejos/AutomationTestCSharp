@@ -60,61 +60,48 @@ steps:
     condition: always()
     testResultsFiles: '$(Agent.TempDirectory)/TestResults/*.trx'
 
-
-- task: PowerShell@2
-  displayName: 'Install ReportGenerator'
-  condition: always()
+- task: NuGetCommand@2
+  displayName: "Download Extent .NET CLI"
   inputs:
-    targetType: 'inline'
-    script: |
-      dotnet tool install -g dotnet-reportgenerator-globaltool
-
-      $toolsPath = "$env:USERPROFILE\.dotnet\tools"
-      Write-Host "Tools path: $toolsPath"
-      $env:PATH += ";$toolsPath"
-
-      dotnet tool list -g
-
+    command: custom
+    arguments: "install Extent.Standalone.NET.CLI -OutputDirectory $(Agent.ToolsDirectory)"
+ 
 - task: PowerShell@2
-  displayName: "Generate HTML Test Report"
-  condition: always()
+  displayName: "Generate HTML Test Report (Extent CLI)"
   inputs:
     targetType: inline
     script: |
-      $toolsPath = "$env:USERPROFILE\.dotnet\tools"
-      $env:PATH += ";$toolsPath"
+      # Buscar el ejecutable
+      $cli = Get-ChildItem "$(Agent.ToolsDirectory)" -Recurse -Filter "extentcli.exe" | Select-Object -First 1
 
-      $trxPath    = "$(Agent.TempDirectory)\TestResults"
-      $reportPath = "$(Build.ArtifactStagingDirectory)\HtmlReport"
-
-      Write-Host "TRX path: $trxPath"
-      Write-Host "Report path: $reportPath"
-
-      if (!(Test-Path $trxPath)) {
-        Write-Host "No TRX path found, skipping report generation."
-        exit 0
+      if (-not $cli) {
+        Write-Error "extentcli.exe not found"
+        exit 1
       }
 
-      if (Test-Path $reportPath) {
-        Remove-Item $reportPath -Recurse -Force
+      $input  = "$(Agent.TempDirectory)\TestResults"
+      $output = "$(Build.ArtifactStagingDirectory)\HtmlReport"
+
+      New-Item -ItemType Directory -Force -Path $output | Out-Null
+
+      Write-Host "Input folder: $input"
+      Write-Host "Output folder: $output"
+      Write-Host "Using: $($cli.FullName)"
+
+      & $cli.FullName transform --in "$input" --out "$output"
+
+      if ($LASTEXITCODE -ne 0) {
+        Write-Error "Extent CLI failed with code $LASTEXITCODE"
+        exit $LASTEXITCODE
       }
-      New-Item -ItemType Directory -Force -Path $reportPath | Out-Null
-
-      reportgenerator `
-        "-reports:$trxPath\*.trx" `
-        "-targetdir:$reportPath" `
-        "-reporttypes:Html;HtmlSummary"
-
-      Write-Host "HTML report generated in $reportPath"
       
 - task: PublishBuildArtifacts@1
-  displayName: "Publish HTML Test Report"
-  condition: always()
+  displayName: "Publish HTML Report"
   inputs:
-    PathtoPublish: "$(Build.ArtifactStagingDirectory)/HtmlReport"
+    PathtoPublish: "$(Build.ArtifactStagingDirectory)\HtmlReport"
     ArtifactName: "HtmlTestReport"
-    publishLocation: "Container"    
-        
+    publishLocation: Container
+      
 - task: PowerShell@2
   displayName: 'Create result tests package'
   condition: always()  
