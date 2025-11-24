@@ -32,6 +32,7 @@ steps:
 
 - task: VSTest@2
   displayName: 'Run tests'
+  name: RunTests
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
@@ -51,12 +52,19 @@ steps:
     condition: always()
     testResultsFiles: '$(Agent.TempDirectory)/TestResults/*.trx'
 
-- task: DotNetCoreCLI@2
+- task: PowerShell@2
   displayName: 'Install ReportGenerator'
+  condition: always()
   inputs:
-    command: 'tool'
-    custom: 'install'
-    arguments: '--global dotnet-reportgenerator-globaltool'  
+    targetType: 'inline'
+    script: |
+      dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      $toolsPath = "$env:USERPROFILE\.dotnet\tools"
+      Write-Host "Tools path: $toolsPath"
+      $env:PATH += ";$toolsPath"
+
+      reportgenerator -version
 
 - task: PowerShell@2
   displayName: "Generate HTML Test Report"
@@ -64,15 +72,31 @@ steps:
   inputs:
     targetType: inline
     script: |
-      $trxPath = "$(Build.ArtifactStagingDirectory)"
-      $reportPath = "$(Build.ArtifactStagingDirectory)/HtmlReport"
+      $toolsPath = "$env:USERPROFILE\.dotnet\tools"
+      $env:PATH += ";$toolsPath"
+
+      $trxPath    = "$(Build.ArtifactStagingDirectory)"
+      $reportPath = "$(Build.ArtifactStagingDirectory)\HtmlReport"
+
+      Write-Host "TRX path: $trxPath"
+      Write-Host "Report path: $reportPath"
+
+      if (!(Test-Path $trxPath)) {
+        Write-Host "No TRX path found, skipping report generation."
+        exit 0
+      }
+
+      if (Test-Path $reportPath) {
+        Remove-Item $reportPath -Recurse -Force
+      }
+      New-Item -ItemType Directory -Force -Path $reportPath | Out-Null
 
       reportgenerator `
-        "-reports:$trxPath/*.trx" `
+        "-reports:$trxPath\*.trx" `
         "-targetdir:$reportPath" `
         "-reporttypes:Html;HtmlSummary"
 
-      Write-Host "Report generated in: $reportPath"
+      Write-Host "HTML report generated in $reportPath"
       
 - task: PublishBuildArtifacts@1
   displayName: "Publish HTML Test Report"
@@ -84,7 +108,10 @@ steps:
     
 - task: PublishBuildArtifacts@1
   displayName: 'Publish screenshots'
-  condition: always() 
+  condition: and(
+    failed('RunTests'), 
+    exists('$(Build.SourcesDirectory)/AutomationTestCSharp/bin/$(buildConfiguration)/Screenshots')
+  )
   inputs:
     PathtoPublish: '$(Build.SourcesDirectory)/AutomationTestCSharp/bin/$(buildConfiguration)/Screenshots'
     ArtifactName: 'Screenshots'
