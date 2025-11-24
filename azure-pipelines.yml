@@ -60,6 +60,7 @@ steps:
     condition: always()
     testResultsFiles: '$(Agent.TempDirectory)/TestResults/*.trx'
 
+
 - task: PowerShell@2
   displayName: 'Install ReportGenerator'
   condition: always()
@@ -72,7 +73,7 @@ steps:
       Write-Host "Tools path: $toolsPath"
       $env:PATH += ";$toolsPath"
 
-      reportgenerator -version
+      dotnet tool list -g
 
 - task: PowerShell@2
   displayName: "Generate HTML Test Report"
@@ -83,7 +84,7 @@ steps:
       $toolsPath = "$env:USERPROFILE\.dotnet\tools"
       $env:PATH += ";$toolsPath"
 
-      $trxPath    = "$(Build.ArtifactStagingDirectory)"
+      $trxPath    = "$(Agent.TempDirectory)\TestResults"
       $reportPath = "$(Build.ArtifactStagingDirectory)\HtmlReport"
 
       Write-Host "TRX path: $trxPath"
