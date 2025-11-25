@@ -42,6 +42,7 @@ steps:
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
+    testFiltercriteria: 'TestCategory=$(TestFilter)'
     vsTestVersion: 'latest'
     runInParallel: true
     codeCoverageEnabled: false

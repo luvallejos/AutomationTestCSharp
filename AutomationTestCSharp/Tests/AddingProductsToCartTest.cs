@@ -30,6 +30,7 @@ namespace AutomationTestCSharp.Tests
 
         #region Tests Methods
         [Test]
+        [Category("Regression"), Category("CartTest")]
         [TestCase("Blue Top")]
         [TestCase("Frozen Tops for kids")]
         public void AddOneProductToCartTest(string productName)
@@ -45,6 +46,7 @@ namespace AutomationTestCSharp.Tests
         }
  
         [Test]
+        [Category("Regression"), Category("CartTest")]
         [TestCase("Fancy Green Top", "Soft Stretch Jeans", "Grunt Blue Slim Fit Jeans")]
         [TestCase("Men Tshirt", "Summer White top", "Pure Cotton Neon Green Tshirt")]
         public void AddProductsToCartTest(string productName1, string productName2, string productName3)
@@ -60,6 +62,7 @@ namespace AutomationTestCSharp.Tests
         }
 
         [Test]
+        [Category("Regression"), Category("CartTest")]
         [TestCase("Fancy Green Top", "Soft Stretch Jeans", "Grunt Blue Slim Fit Jeans")]
         [TestCase("Men Tshirt", "Summer White Top", "Pure Cotton Neon Green Tshirt")]
         public void RemoveProductsFromCartTest(string productName1, string productName2, string productName3)

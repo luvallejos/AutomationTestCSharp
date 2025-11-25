@@ -28,6 +28,7 @@ namespace AutomationTestCSharp.Tests
 
         #region Tests Methods
         [Test]
+        [Category("Regression"), Category("ProductsSearchingTest")]
         [TestCase("Blue")]
         [TestCase("Fancy")]
         [TestCase("Jeans")]
@@ -39,6 +40,7 @@ namespace AutomationTestCSharp.Tests
         }
 
         [Test]
+        [Category("Regression"), Category("ProductsSearchingTest")]
         [TestCaseSource(nameof(GetDataRow), new object[] { "ValidateProductDetailsTestSource" })]
         public void ValidateProductDetailsTest(Dictionary<string, string> testData)
         {

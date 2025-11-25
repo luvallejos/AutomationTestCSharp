@@ -28,6 +28,7 @@ namespace AutomationTestCSharp.Tests
 
         #region Tests Methods
         [Test]
+        [Category("Regression"), Category("SideBarFilterTest")]
         [TestCaseSource(nameof(GetDataRow), new object[] { "SideBarFilterTestSource" })]
         public async Task SideBarFilterByCategoryAndSubcategoryTest(Dictionary<string, string> testData)
         {
@@ -38,6 +39,7 @@ namespace AutomationTestCSharp.Tests
         }
 
         [Test]
+        [Category("Regression"), Category("SideBarFilterTest")]
         [TestCaseSource(nameof(GetDataRow), new object[] { "BrandsFilterTestSource" })]
         public async Task SideBarFilterByBrandTest(Dictionary<string, string> testData)
         {

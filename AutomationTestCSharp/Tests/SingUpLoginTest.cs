@@ -34,6 +34,7 @@ namespace AutomationTestCSharp.Tests
 
         #region Tests Methods
         [Test]
+        [Category("Regression"), Category("SignUpLoginTest")]
         public async Task SignUpAndLoginUserTest()
         {
             await _deleteUserAccountHelper.DeleteUserAccountIfItExists(apiHelper, userData);
@@ -50,6 +51,7 @@ namespace AutomationTestCSharp.Tests
         }
 
         [Test]
+        [Category("Regression"), Category("SignUpLoginTest")]
         [TestCase("invalidEmail@gmail.com","invalidPassword")]
         public async Task LoginWithInvalidUserDataTest(string invalidUserEmail, string invalidPassword)
         {
