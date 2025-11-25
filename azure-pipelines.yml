@@ -45,6 +45,8 @@ steps:
     testFiltercriteria: '$(TestFilter)'
     vsTestVersion: 'latest'
     runInParallel: true
+    rerunFailedTests: true
+    rerunFailedTestCount: 3
     codeCoverageEnabled: false
 
 - task: PublishBuildArtifacts@1
