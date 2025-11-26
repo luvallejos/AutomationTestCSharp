@@ -116,8 +116,8 @@ steps:
       $outDir = "$(Build.ArtifactStagingDirectory)"
       
       $screenshotsPath = Join-Path $src "AutomationTestCSharp\bin\$buildConfig\Screenshots"
-      $trxPath = "$(Agent.TempDirectory)\TestResults\"
-      $htmlReportPath  = "$(Agent.TempDirectory)\ExtentReport\"
+      $trxPath = "$(Agent.TempDirectory)\TestResults"
+      $htmlReportPath  = "$(Agent.TempDirectory)\ExtentReport"
 
       $tempFolder = Join-Path $outDir "TestResultsStaging"
       if (Test-Path $tempFolder) { Remove-Item $tempFolder -Recurse -Force }
