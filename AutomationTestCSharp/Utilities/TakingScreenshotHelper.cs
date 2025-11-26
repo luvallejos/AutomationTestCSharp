@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace UITestFramework.Utilities
+namespace AutomationTestCSharp.Utilities
 {
     public static class TakingScreenshotHelper
     {

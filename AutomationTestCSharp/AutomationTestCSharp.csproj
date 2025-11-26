@@ -58,6 +58,7 @@
     <Compile Include="Utilities\DataDrivenManage.cs" />
     <Compile Include="Utilities\DeleteUserAccountHelper.cs" />
     <Compile Include="Utilities\ResourcesUtilities.cs" />
+    <Compile Include="Utilities\TakingScreenshotHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

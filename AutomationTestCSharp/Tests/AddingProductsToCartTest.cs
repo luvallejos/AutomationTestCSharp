@@ -4,7 +4,7 @@ using NUnit.Framework.Legacy;
 using System.Collections.Generic;
 using System.Linq;
 using UITestFramework.Pages;
-using UITestFramework.Utilities;
+using AutomationTestCSharp.Utilities;
 
 namespace AutomationTestCSharp.Tests
 {

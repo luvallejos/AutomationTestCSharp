@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UITestFramework.Pages;
-using UITestFramework.Utilities;
+using AutomationTestCSharp.Utilities;
 
 namespace AutomationTestCSharp.Tests
 {
