@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System;
 using System.Threading;
 using UITestFramework.Utilities;
 
@@ -7,27 +8,15 @@ namespace UITestFramework.Pages
     public class LogInPage: BasePage
     {
         #region Constants
-        private const string _loginPanelLocator = ".login-form";
-        private const string _emailLoginInputLocator = "input[name='email']";
-        private const string _passwordLoginInputLocator = "input[name='password']";
-        private const string _submitLoginBtnLocator = "button[data-qa='login-button']";
-        private const string _loginErrorMessageXpathLocator = ".//p[contains(text(),'Your email or password is incorrect!')]";
-        private const string _signUpPanelLocator = ".signup-form";
-        private const string _nameSignUpInputLocator = "input[data-qa='signup-name']";
-        private const string _emailSignUpInputLocator = "input[data-qa='signup-email']";
-        private const string _submitSignUpBtnLocator = "button[data-qa='signup-button']";
-        #endregion
-
-        #region Properties
-        public IWebElement LoginPanel => _driver.FindElement(By.CssSelector(_loginPanelLocator));
-        public IWebElement LoginEmailInput => LoginPanel.FindElement(By.CssSelector(_emailLoginInputLocator));
-        public IWebElement LoginPasswordInput => LoginPanel.FindElement(By.CssSelector(_passwordLoginInputLocator));
-        public IWebElement LoginBtn => LoginPanel.FindElement(By.CssSelector(_submitLoginBtnLocator));
-        public IWebElement LoginErrorMessage => LoginPanel.FindElement(By.XPath(_loginErrorMessageXpathLocator));
-        public IWebElement SignUpPanel => _driver.FindElement(By.CssSelector(_signUpPanelLocator));
-        public IWebElement SignUpNameInput => SignUpPanel.FindElement(By.CssSelector(_nameSignUpInputLocator));
-        public IWebElement SignUpEmailInput => SignUpPanel.FindElement(By.CssSelector(_emailSignUpInputLocator));
-        public IWebElement SignUpBtn => SignUpPanel.FindElement(By.CssSelector(_submitSignUpBtnLocator));
+        private static readonly By LoginPanel = By.CssSelector(".login-form");
+        private static readonly By EmailInput = By.CssSelector("input[name='email']");
+        private static readonly By PasswordInput = By.CssSelector("input[name='password']");
+        private static readonly By LoginBtn = By.CssSelector("button[data-qa='login-button']");
+        private static readonly By LoginError = By.XPath(".//p[contains(.,'incorrect')]");
+        private static readonly By SignUpPanel = By.CssSelector(".signup-form");
+        private static readonly By NameSignUpInput = By.CssSelector("input[data-qa='signup-name']");
+        private static readonly By EmailSignUpInput = By.CssSelector("input[data-qa='signup-email']");
+        private static readonly By SubmitSignUpBtn = By.CssSelector("input[data-qa='signup-button']");
 
         #endregion
 
@@ -37,40 +26,37 @@ namespace UITestFramework.Pages
         }
         #endregion
         #region Methods
-        public void waitUntilLoginPageDisplayed()
+        public void WaitUntilLoginPageIsDisplayed()
         {
-            _driver.WaitUntilDisplayed(_loginPanelLocator, "Login Page is not displayed");
+            _driver.WaitUntilVisible(LoginPanel, "Login Page is not displayed");
         }
 
         public void Login(string email, string password)
         {
-            LoginEmailInput.Clear();
-            LoginEmailInput.SendKeys(email);
-            LoginPasswordInput.Clear();
-            LoginPasswordInput.SendKeys(password);
-            LoginBtn.Click();
+            _driver.Type(EmailInput, email);
+            _driver.Type(PasswordInput, password);
+            _driver.Click(LoginBtn);
         }
 
-        public void IsLoginSuccessfull()
+        public bool IsLoginSuccesful()
         {
-            _driver.WaitUntilDisplayed(Header.DeleteAccountBtn, "Login was not succesfull.");
+            if (Header.IsUserLogged())
+                return true;
+            return false;
         }
 
-        public void IsLoginNotSuccessfull()
+        public bool IsLoginErrorDisplayed()
         {
-
-            _driver.WaitUntilDisplayed(LoginErrorMessage, "Login error is not displayed.");
+            return _driver.WaitUntilVisible(LoginError) != null ? true : false;
         }
 
         public SignUpPage GoToSignUpPage(string name, string email)
         {
-            SignUpNameInput.Clear();
-            SignUpNameInput.SendKeys(name);
-            SignUpEmailInput.Clear();
-            SignUpEmailInput.SendKeys(email);
-            SignUpBtn.Click();
+            _driver.Type(NameSignUpInput, name);
+            _driver.Type(EmailSignUpInput, email);
+            _driver.Click(SubmitSignUpBtn);
             SignUpPage signUpPage = new SignUpPage(_driver);
-            signUpPage.waitUntilSignUpPageDisplayed();
+            signUpPage.WaitUntilSignUpPageDisplayed();
             return signUpPage;
         }
         #endregion

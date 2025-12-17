@@ -33,9 +33,8 @@ namespace AutomationTestCSharp.Utilities
 
             _logInPage = _homePage.Header.GoToLoginPage();
             _logInPage.Login(userData.Email, userData.Password);
-            _logInPage.IsLoginSuccessfull();
-            driver.ScrollToElement(_homePage.Header.DeleteAccountBtn);
-            _homePage.Header.DeleteAccountBtn.Click();
+            _logInPage.IsLoginSuccesful();
+            _homePage.Header.DeleteAccount();
             Thread.Sleep(3000); //wait for account to be deleted 
 
             userExists = await apiHelper.DoesUserAccountExists(userData.Email);

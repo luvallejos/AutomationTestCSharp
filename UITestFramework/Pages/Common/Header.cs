@@ -8,22 +8,12 @@ namespace UITestFramework.Pages.Commons
     {
         #region Constants
         private readonly IWebDriver _driver;
-        private const string _homeBtnLocator = "#header i.fa.fa-home";
-        private const string _productsBtnLocator = "#header i.material-icons.card_travel";
-        private const string _cartBtnLocator = "#header i.fa.fa-shopping-cart";
-        private const string _singUpLoginBtnLocator = "#header i.fa.fa-lock";
-        private const string _deleteAccountBtnLocator = "#header i.fa-trash-o";
-        private const string _logOutUserBtnLocator = "#header i.fa.fa-lock";
-        #endregion
-
-        #region Properties
-        public IWebElement HomeBtn => _driver.FindElement(By.CssSelector(_homeBtnLocator));
-        public IWebElement ProductsBtn => _driver.FindElement(By.CssSelector(_productsBtnLocator));
-        public IWebElement CartBtn => _driver.FindElement(By.CssSelector(_cartBtnLocator));
-        public IWebElement SignUpLoginBtn => _driver.FindElement(By.CssSelector(_singUpLoginBtnLocator));
-        public IWebElement DeleteAccountBtn => _driver.FindElement(By.CssSelector(_deleteAccountBtnLocator));
-        public IWebElement LogOutBtn => _driver.FindElement(By.CssSelector(_logOutUserBtnLocator));
-
+        private static readonly By HomeBtn = By.CssSelector("#header i.fa.fa-home");
+        private static readonly By ProductsBtn = By.CssSelector("#header i.material-icons.card_travel");
+        private static readonly By CartBtn = By.CssSelector("#header i.fa.fa-shopping-cart");
+        private static readonly By SignUpLoginBtn = By.CssSelector("#header i.fa.fa-lock");
+        private static readonly By LogOutBtn = By.CssSelector("#header i.fa.fa-lock");
+        private static readonly By DeleteAccountBtn = By.CssSelector("#header i.fa-trash-o");
         #endregion
 
         #region Constructors
@@ -38,25 +28,25 @@ namespace UITestFramework.Pages.Commons
         public HomePage GoToHomePage()
         {
             _driver.ScrollToElement(HomeBtn);
-            HomeBtn.Click();
+            _driver.Click(HomeBtn);
             HomePage homePage = new HomePage(_driver);
-            homePage.waitUntilHomePageDisplayed();
+            homePage.WaitUntilHomePageDisplayed();
             return homePage;
         }
 
         public ProductsPage GoToProductsDetailPage()
         {
             _driver.ScrollToElement(ProductsBtn);
-            ProductsBtn.Click();
+            _driver.Click(ProductsBtn);
             ProductsPage productsPage = new ProductsPage(_driver);
-            productsPage.waitUntilProductsPageDisplayed();
+            productsPage.WaitUntilProductsPageDisplayed();
             return productsPage;
         }
 
         public ViewCartPage GoToViewCartPage()
         {
             _driver.ScrollToElement(CartBtn);
-            CartBtn.Click();
+            _driver.Click(CartBtn);
             ViewCartPage viewCartPage = new ViewCartPage(_driver);
             viewCartPage.waitUntilViewCartPageDisplayed();
             return viewCartPage;
@@ -64,19 +54,30 @@ namespace UITestFramework.Pages.Commons
         public LogInPage GoToLoginPage()
         {
             _driver.ScrollToElement(SignUpLoginBtn);
-            SignUpLoginBtn.Click();
+            _driver.Click(SignUpLoginBtn);
             LogInPage loginPage = new LogInPage(_driver);
-            loginPage.waitUntilLoginPageDisplayed();
+            loginPage.WaitUntilLoginPageIsDisplayed();
             return loginPage;
         }
 
         public LogInPage LogOutUser()
         {
             _driver.ScrollToElement(LogOutBtn);
-            LogOutBtn.Click();
+            _driver.Click(LogOutBtn);
             LogInPage loginPage = new LogInPage(_driver);
-            loginPage.waitUntilLoginPageDisplayed();
+            loginPage.WaitUntilLoginPageIsDisplayed();
             return loginPage;
+        }
+
+        public void DeleteAccount() 
+        {
+            _driver.ScrollToElement(DeleteAccountBtn);
+            _driver.Click(DeleteAccountBtn);
+        }
+
+        public bool IsUserLogged()
+        {
+            return _driver.WaitUntilVisible(DeleteAccountBtn) != null ? true : false;
         }
         #endregion
     }

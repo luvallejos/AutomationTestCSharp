@@ -8,15 +8,10 @@ namespace UITestFramework.Pages.Commons
 {
     public class BreadCrumbNavigation
     {
-        #region Constants
-        private readonly IWebDriver _driver;
-        private const string _breadCrumbLocator = "div.breadcrumbs";
+        #region Private Variables
+        protected readonly IWebDriver _driver;
+        private static readonly By BreadCrumb = By.CssSelector("div.breadcrumbs");
         private const string _breadCrumbNavigationListLocator = "li";
-
-        #endregion
-
-        #region Properties
-        public IWebElement BreadCrumb => _driver.FindElement(By.CssSelector(_breadCrumbLocator));
         #endregion
 
         #region Constructors
@@ -30,7 +25,8 @@ namespace UITestFramework.Pages.Commons
         public List<string> GetNavigationBreadcrumsList()
         {
             List<string> nav = new List<string>();
-            List<IWebElement> elements = BreadCrumb.FindElements(By.CssSelector(_breadCrumbNavigationListLocator)).ToList();
+            var el = _driver.WaitUntilVisible(BreadCrumb);
+            List<IWebElement> elements = el.FindElements(By.CssSelector(_breadCrumbNavigationListLocator)).ToList();
 
             foreach (var element in elements)
             {

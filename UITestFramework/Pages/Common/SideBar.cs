@@ -1,33 +1,27 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using UITestFramework.Utilities;
 
 namespace UITestFramework.Pages.Commons
 {
     public class SideBar
     {
-        #region Constants
-        private readonly IWebDriver _driver;
-        private const string _categoryAccordianLocator = "#accordian";
+        #region Private Variables
+        protected readonly IWebDriver _driver;
+        private static readonly By CategoryAccordian = By.CssSelector("#accordian");
+        private static readonly By BrandsPanel = By.CssSelector(".brands_products");
         private const string _subcategoriesListAccordianLocator = "a[data-parent='#accordian']"; //get a elements which are clickeable
         private const string _subcategoryAccordianLocator = ".//a[contains(text(),'{0}')]"; //get a elements which are clickeable
-        private const string _brandsPanelLocator = ".brands_products";
         private const string _brandsListLocator = "a"; //get a elements inside brands panel
-        #endregion
-
-        #region Properties
-        public IWebElement CategoryAccordian => _driver.FindElement(By.CssSelector(_categoryAccordianLocator));
-        public IWebElement BrandsPanel => _driver.FindElement(By.CssSelector(_brandsPanelLocator));
-
         #endregion
 
         #region Constructors
         public SideBar(IWebDriver webDriver)
         {
-           _driver = webDriver;
+            _driver = webDriver;
         }
 
         #endregion
@@ -39,7 +33,7 @@ namespace UITestFramework.Pages.Commons
         }
         public List<IWebElement> GetAllCategoriesPanels()
         {
-            return CategoryAccordian.FindElements(By.CssSelector(_subcategoriesListAccordianLocator)).ToList();
+            return _driver.WaitUntilVisible(CategoryAccordian).FindElements(By.CssSelector(_subcategoriesListAccordianLocator)).ToList();
         }
 
         public List<string> GetBrandsNames()
@@ -49,7 +43,7 @@ namespace UITestFramework.Pages.Commons
 
         public List<IWebElement> GetAllBrandsPanels()
         {
-            return BrandsPanel.FindElements(By.CssSelector(_brandsListLocator)).ToList();
+            return _driver.WaitUntilVisible(BrandsPanel).FindElements(By.CssSelector(_brandsListLocator)).ToList();
         }
 
         public void ApplyBrandFilter(string filter)
@@ -61,7 +55,7 @@ namespace UITestFramework.Pages.Commons
                 _driver.ScrollToElement(filterToSelect);
                 filterToSelect.Click();
                 FeaturedItems featuredItemsSection = new FeaturedItems(_driver);
-                _driver.WaitUntilDisplayed(featuredItemsSection.FeaturedItemsSection, "Failed loading featured Items section.");
+                Assert.That(featuredItemsSection.IsFeaturedItemSectionDisplayed(), Is.True);
             }
             else
             {
@@ -85,7 +79,7 @@ namespace UITestFramework.Pages.Commons
         public IWebElement GetCategoryPanelDivElementByName(string category)
         {
             //get category div element which is not clickeable but it is related to subcategories
-            IWebElement panelDivToSelect = CategoryAccordian.FindElement(By.Id(category.Capitalize()));
+            IWebElement panelDivToSelect = _driver.WaitUntilVisible(CategoryAccordian).FindElement(By.Id(category.Capitalize()));
             if (panelDivToSelect != null)
             {
                 return panelDivToSelect;
@@ -135,7 +129,7 @@ namespace UITestFramework.Pages.Commons
                 _driver.ScrollToElement(subcat);
                 subcat.Click();
                 FeaturedItems featuredItemsSection = new FeaturedItems(_driver);
-                _driver.WaitUntilDisplayed(featuredItemsSection.FeaturedItemsSection, "Failed loading featured Items section.");
+                Assert.That(featuredItemsSection.IsFeaturedItemSectionDisplayed(), Is.True);
             }
             else
             {

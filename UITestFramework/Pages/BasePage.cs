@@ -1,6 +1,9 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 using UITestFramework.Pages.Common;
 using UITestFramework.Pages.Commons;
+using UITestFramework.Utilities;
 
 namespace UITestFramework.Pages
 {
@@ -26,7 +29,7 @@ namespace UITestFramework.Pages
             FeaturedItems = new FeaturedItems(webDriver);
             AddedToCartModal = new AddedToCartModal(webDriver);
         }
-
         #endregion
+
     }
 }

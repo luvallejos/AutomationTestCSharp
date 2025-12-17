@@ -6,16 +6,11 @@ namespace UITestFramework.Pages.Common
 {
     public class AddedToCartModal
     {
-        #region Constants
-        private readonly IWebDriver _driver;
-        private const string _cartModalDisplayedLocator = "#cartModal[class='modal show']";
-        private const string _goToViewCartBtnLocator = "a[href='/view_cart']";
-        private const string _continueShoppingBtnLocator = "button[class~='close-modal']";
-
-        #endregion
-
-        #region Properties
-        public IWebElement CartModal => _driver.FindElement(By.CssSelector(_cartModalDisplayedLocator));
+        #region Private Variables
+        protected readonly IWebDriver _driver;
+        private static readonly By CartModal = By.CssSelector("#cartModal[class='modal show']");
+        private static readonly By GoToViewCartBtn = By.CssSelector("a[href='/view_cart']");
+        private static readonly By ContinueShoppingBtn = By.CssSelector("button[class~='close-modal']");
         #endregion
 
         #region Constructors
@@ -30,8 +25,8 @@ namespace UITestFramework.Pages.Common
         {
             try
             {
-                _driver.WaitUntilDisplayed(_cartModalDisplayedLocator, "Added to cart modal is not displayed");
-                return CartModal.Displayed;
+                var el = _driver.WaitUntilVisible(CartModal);
+                return el.Displayed;
             }
             catch (NoSuchElementException)
             {
@@ -42,7 +37,7 @@ namespace UITestFramework.Pages.Common
         public ViewCartPage GoToViewCartPage() 
         {
             _driver.ScrollToElement(CartModal);
-            CartModal.FindElement(By.CssSelector(_goToViewCartBtnLocator)).Click();
+            _driver.Click(GoToViewCartBtn);
             ViewCartPage viewCartPage = new ViewCartPage(_driver);
             viewCartPage.waitUntilViewCartPageDisplayed();
             return viewCartPage;
@@ -51,7 +46,7 @@ namespace UITestFramework.Pages.Common
         public void ClickContinueShopping()
         {
             _driver.ScrollToElement(CartModal);
-            CartModal.FindElement(By.CssSelector(_continueShoppingBtnLocator)).Click();
+            _driver.Click(ContinueShoppingBtn);
             Thread.Sleep(3000); //wait for modal to disappear
         }
         #endregion

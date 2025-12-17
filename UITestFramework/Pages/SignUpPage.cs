@@ -1,34 +1,32 @@
 ﻿using OpenQA.Selenium;
 using System.Collections.Generic;
-using System.Threading;
 using UITestFramework.Dto;
 using UITestFramework.Pages.Commons;
 using UITestFramework.Utilities;
 
 namespace UITestFramework.Pages
 {
-    public class SignUpPage
+    public class SignUpPage : BasePage
     {
-        #region Constants
-        private readonly IWebDriver _driver;
-        private const string _signUpFormLocator = "form[action='/signup']";
-        private const string _genderSignUpRadioLocator = "input#id_gender1";
-        private const string _passwordSignUpInputLocator = "input#password";
-        private const string _dayBirthDaySelectLocator = "select#days";
-        private const string _monthBirthDaySelectLocator = "select#months";
-        private const string _yearBirthDaySelectLocator = "select#years";
-        private const string _firstNameSignUpInputLocator = "input#first_name";
-        private const string _lastNameSignUpInputLocator = "input#last_name";
-        private const string _companySignUpInputLocator = "input#company";
-        private const string _addressSignUpInputLocator = "input#address1";
-        private const string _countrySignUpSelectLocator = "select#country";
-        private const string _stateSignUpInputLocator = "input#state";
-        private const string _citySignUpInputLocator = "input#city";
-        private const string _zipCodeSignUpInputLocator = "input#zipcode";
-        private const string _mobileNumberSignUpInputLocator = "input#mobile_number";
-        private const string _createAccountBtnLocator = "button[data-qa='create-account']";
-        private const string _accountCreatedMessageLocator = "h2[data-qa='account-created']";
-        private const string _continueBtnLocator = "a[data-qa='continue-button']";
+        #region Private Variables
+        private static readonly By SignUpForm = By.CssSelector("form[action='/signup']");
+        private static readonly By GenderSelector = By.CssSelector("input#id_gender1");
+        private static readonly By PasswordInput = By.CssSelector("input#password");
+        private static readonly By DayBirthdaySelector = By.CssSelector("select#days");
+        private static readonly By MonthBirthdaySelector = By.CssSelector("select#months");
+        private static readonly By YearBirthdaySelector = By.CssSelector("select#years");
+        private static readonly By FirstNameInput = By.CssSelector("input#first_name");
+        private static readonly By LastNameInput = By.CssSelector("input#last_name");
+        private static readonly By CompanyInput = By.CssSelector("input#company");
+        private static readonly By AddressInput = By.CssSelector("input#address1");
+        private static readonly By CountrySelector = By.CssSelector("select#country");
+        private static readonly By StateInput = By.CssSelector("input#state");
+        private static readonly By CityInput = By.CssSelector("input#city");
+        private static readonly By ZipCodeInput = By.CssSelector("input#zipcode");
+        private static readonly By MobileNumberInput = By.CssSelector("input#mobile_number");
+        private static readonly By CreateAccountBtn = By.CssSelector("button[data-qa='create-account']");
+        private static readonly By AccountCreatedMessage = By.CssSelector("h2[data-qa='account-created']");
+        private static readonly By ContinueBtn = By.CssSelector("a[data-qa='continue-button']");
 
         private Dictionary<string, string> MonthBirthdayMapping
         {
@@ -53,67 +51,44 @@ namespace UITestFramework.Pages
         }
         #endregion
 
-        #region Properties
-        public Header Header { get; private set; }
-        public IWebElement SignUpForm => _driver.FindElement(By.CssSelector(_signUpFormLocator));
-        public IWebElement GenderSelector => _driver.FindElement(By.CssSelector(_genderSignUpRadioLocator));
-        public IWebElement PasswordInput => _driver.FindElement(By.CssSelector(_passwordSignUpInputLocator));
-        public IWebElement DayBirthdaySelector => _driver.FindElement(By.CssSelector(_dayBirthDaySelectLocator));
-        public IWebElement MonthBirthdaySelector => _driver.FindElement(By.CssSelector(_monthBirthDaySelectLocator));
-        public IWebElement YearBirthdaySelector => _driver.FindElement(By.CssSelector(_yearBirthDaySelectLocator));
-        public IWebElement FirstNameInput => _driver.FindElement(By.CssSelector(_firstNameSignUpInputLocator));
-        public IWebElement LastNameInput => _driver.FindElement(By.CssSelector(_lastNameSignUpInputLocator));
-        public IWebElement CompanyInput => _driver.FindElement(By.CssSelector(_companySignUpInputLocator));
-        public IWebElement AddressInput => _driver.FindElement(By.CssSelector(_addressSignUpInputLocator));
-        public IWebElement CountrySelector => _driver.FindElement(By.CssSelector(_countrySignUpSelectLocator));
-        public IWebElement StateInput => _driver.FindElement(By.CssSelector(_stateSignUpInputLocator));
-        public IWebElement CityInput => _driver.FindElement(By.CssSelector(_citySignUpInputLocator));
-        public IWebElement ZipCodeInput => _driver.FindElement(By.CssSelector(_zipCodeSignUpInputLocator));
-        public IWebElement MobileNumberInput => _driver.FindElement(By.CssSelector(_mobileNumberSignUpInputLocator));
-        public IWebElement CreateAccountBtn => _driver.FindElement(By.CssSelector(_createAccountBtnLocator));
-        public IWebElement AccountCreatedMessage => _driver.FindElement(By.CssSelector(_accountCreatedMessageLocator));
-        public IWebElement ContinueBtn => _driver.FindElement(By.CssSelector(_continueBtnLocator));
-        #endregion
-
         #region Constructor
-        public SignUpPage(IWebDriver webDriver)
+        public SignUpPage(IWebDriver webDriver) : base(webDriver)
         {
-            _driver = webDriver;
-            Header = new Header(_driver);
         }
         #endregion
 
         #region Methods
-        public void waitUntilSignUpPageDisplayed()
+        public void WaitUntilSignUpPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(_signUpFormLocator, "Sign Up Page is not displayed");
+            _driver.WaitUntilVisible(SignUpForm, "Sign Up Page is not displayed");
         }
 
         public void SignUpUser(UserData userData) 
         {
-            GenderSelector.Click();
-            PasswordInput.SendKeys(userData.Password);
+            _driver.Click(GenderSelector);
+            _driver.Type(PasswordInput, userData.Password);
 
             var birthDay = userData.BirthDay.Split('_');
-            DayBirthdaySelector.SendKeys(birthDay[2]);
-            MonthBirthdaySelector.SendKeys(MonthBirthdayMapping[birthDay[1]]);
-            YearBirthdaySelector.SendKeys(birthDay[0]);
+            _driver.Type(DayBirthdaySelector, birthDay[2]);
+            _driver.Type(MonthBirthdaySelector, MonthBirthdayMapping[birthDay[1]]);
+            _driver.Type(YearBirthdaySelector, birthDay[0]);
+            _driver.Type(FirstNameInput, userData.FirstName);
 
-            FirstNameInput.SendKeys(userData.FirstName);
-            LastNameInput.SendKeys(userData.LastName);
-            CompanyInput.SendKeys(userData.Company);
-            AddressInput.SendKeys(userData.Address);
+            _driver.Type(FirstNameInput,userData.FirstName);
+            _driver.Type(LastNameInput, userData.LastName);
+            _driver.Type(CompanyInput, userData.Company);
+            _driver.Type(AddressInput, userData.Address);
 
-            CountrySelector.SendKeys(userData.Country);
-            StateInput.SendKeys(userData.State);
-            CityInput.SendKeys(userData.City);
-            ZipCodeInput.SendKeys(userData.Zipcode);
-            MobileNumberInput.SendKeys(userData.MobileNumber);
+            _driver.Type(CountrySelector, userData.Country);
+            _driver.Type(StateInput, userData.State);
+            _driver.Type(CityInput, userData.City);
+            _driver.Type(ZipCodeInput, userData.Zipcode);
+            _driver.Type(MobileNumberInput, userData.MobileNumber);
 
-            CreateAccountBtn.Click();
+            _driver.Click(CreateAccountBtn);
 
-            _driver.WaitUntilDisplayed(_accountCreatedMessageLocator, "The account created message is not displayed.");
-            ContinueBtn.Click();
+            _driver.WaitUntilVisible(AccountCreatedMessage, "The account created message is not displayed.");
+            _driver.Click(ContinueBtn);
         }
 
         #endregion

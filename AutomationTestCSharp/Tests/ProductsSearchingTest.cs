@@ -7,7 +7,7 @@ using AutomationTestCSharp.Utilities;
 namespace AutomationTestCSharp.Tests
 {
     [TestFixture]
-    internal class ProductsSearchingTests : AbstractTest
+    internal class ProductsSearchingTest : AbstractTest
     {
         #region Variables
         private HomePage _homePage;
@@ -35,7 +35,7 @@ namespace AutomationTestCSharp.Tests
         public void SearchProductsTest(string input)
         {
             _productsPage = _homePage.Header.GoToProductsDetailPage();
-            _productsPage.waitUntilProductsPageDisplayed();
+            _productsPage.WaitUntilProductsPageDisplayed();
             _productsPage.ValidateResultsForSearchProduct(input);
         }
 
@@ -45,7 +45,7 @@ namespace AutomationTestCSharp.Tests
         public void ValidateProductDetailsTest(Dictionary<string, string> testData)
         {
             _productsPage = _homePage.Header.GoToProductsDetailPage();
-            _productsPage.waitUntilProductsPageDisplayed();
+            _productsPage.WaitUntilProductsPageDisplayed();
             _productDetailsPage = _productsPage.GoToProductDetailsPageByProductName(testData["Name"]);
             _productDetailsPage.ValidateProductInformationDetails(testData);
         }

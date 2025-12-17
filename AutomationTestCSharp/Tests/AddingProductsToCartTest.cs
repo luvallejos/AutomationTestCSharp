@@ -36,7 +36,7 @@ namespace AutomationTestCSharp.Tests
         public void AddOneProductToCartTest(string productName)
         {
             _productsPage = _homePage.Header.GoToProductsDetailPage();
-            _productsPage.waitUntilProductsPageDisplayed();
+            _productsPage.WaitUntilProductsPageDisplayed();
             _productsPage.AddProductToCartByProductName(productName);
             _viewCartPage = _homePage.AddedToCartModal.GoToViewCartPage();
 
@@ -52,7 +52,7 @@ namespace AutomationTestCSharp.Tests
         public void AddProductsToCartTest(string productName1, string productName2, string productName3)
         {
             _productsPage = _homePage.Header.GoToProductsDetailPage();
-            _productsPage.waitUntilProductsPageDisplayed();
+            _productsPage.WaitUntilProductsPageDisplayed();
 
             List<string> productNames = new List<string> { productName1, productName2, productName3 };
 
@@ -68,7 +68,7 @@ namespace AutomationTestCSharp.Tests
         public void RemoveProductsFromCartTest(string productName1, string productName2, string productName3)
         {
             _productsPage = _homePage.Header.GoToProductsDetailPage();
-            _productsPage.waitUntilProductsPageDisplayed();
+            _productsPage.WaitUntilProductsPageDisplayed();
 
             List<string> productNamesToAdd = new List<string> { productName1, productName2, productName3 };
 

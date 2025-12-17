@@ -47,7 +47,7 @@ namespace AutomationTestCSharp.Tests
 
             _loginPage = _homePage.Header.LogOutUser();
             _loginPage.Login(userData.Email, userData.Password);
-            _loginPage.IsLoginSuccessfull();
+            ClassicAssert.IsTrue(_loginPage.IsLoginSuccesful(), "Login failed.");
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace AutomationTestCSharp.Tests
 
             _loginPage = _homePage.Header.GoToLoginPage();
             _loginPage.Login(invalidUserEmail, invalidPassword);
-            _loginPage.IsLoginNotSuccessfull();
+            ClassicAssert.IsTrue(_loginPage.IsLoginErrorDisplayed(), "Login error message is not displayed.");
         }
 
         #endregion Tests Methods

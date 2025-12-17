@@ -52,7 +52,7 @@
     <Compile Include="Tests\AbstractTest.cs" />
     <Compile Include="Tests\HomePageFilterTest.cs" />
     <Compile Include="Tests\AddingProductsToCartTest.cs" />
-    <Compile Include="Tests\ProductsSearchingTests.cs" />
+    <Compile Include="Tests\ProductsSearchingTest.cs" />
     <Compile Include="Tests\SingUpLoginTest.cs" />
     <Compile Include="Utilities\DataConnection.cs" />
     <Compile Include="Utilities\DataDrivenManage.cs" />

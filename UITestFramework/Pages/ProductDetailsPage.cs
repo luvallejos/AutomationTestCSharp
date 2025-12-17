@@ -10,17 +10,10 @@ namespace UITestFramework.Pages
 {
     public class ProductDetailsPage : BasePage
     {
-        #region Constants
-        private const string _productDetailsPanelLocator = ".product-details";
-        private const string _productInformationPanelLocator = ".product-information";
+        #region Private Variables
+        private static readonly By ProductDetailsPanel = By.CssSelector(".product-details");
+        private static readonly By ProductInformationPanel = By.CssSelector(".product-information");
         private const string _attributeProductXPathLocator = ".//b[contains(text(), '{0}')]/parent::p";
-
-        #endregion
-
-        #region Properties
-        public IWebElement ProductDetailsPanel => _driver.FindElement(By.CssSelector(_productDetailsPanelLocator));
-        public IWebElement ProductInformationPanel => _driver.FindElement(By.CssSelector(_productInformationPanelLocator));
-
         #endregion
 
         #region Constructors
@@ -32,20 +25,21 @@ namespace UITestFramework.Pages
         #region Methods
         public void waitUntilProductDetailsPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(_productDetailsPanelLocator, "Products Details Page is not displayed");
+            _driver.WaitUntilVisible(ProductDetailsPanel, "Products Details Page is not displayed");
         }
 
         public Product GetProductInformationDetails()
         {
             var product = new Product();
-            product.Name = ProductInformationPanel.FindElements(By.CssSelector("h2")).FirstOrDefault().Text;
-            product.Price = Convert.ToInt32(ProductInformationPanel.FindElements(By.CssSelector("span span")).FirstOrDefault().Text.Replace("Rs.", ""));
-            product.Availability = ProductInformationPanel.FindElements(By.XPath(string.Format(_attributeProductXPathLocator, "Availability"))).FirstOrDefault().Text.Replace("Availability:", "").Trim();
-            product.Condition = ProductInformationPanel.FindElements(By.XPath(string.Format(_attributeProductXPathLocator, "Condition"))).FirstOrDefault().Text.Replace("Condition:", "").UnescapeTextAndRemoveSpaces();
-            string brandText = ProductInformationPanel.FindElements(By.XPath(string.Format(_attributeProductXPathLocator, "Brand"))).FirstOrDefault().Text.Replace("Brand:", "").Replace("&", "").UnescapeTextAndRemoveSpaces();
+            var productElement = _driver.WaitUntilVisible(ProductInformationPanel);
+            product.Name = productElement.FindElements(By.CssSelector("h2")).FirstOrDefault().Text;
+            product.Price = Convert.ToInt32(productElement.FindElements(By.CssSelector("span span")).FirstOrDefault().Text.Replace("Rs.", ""));
+            product.Availability = productElement.FindElements(By.XPath(string.Format(_attributeProductXPathLocator, "Availability"))).FirstOrDefault().Text.Replace("Availability:", "").Trim();
+            product.Condition = productElement.FindElements(By.XPath(string.Format(_attributeProductXPathLocator, "Condition"))).FirstOrDefault().Text.Replace("Condition:", "").UnescapeTextAndRemoveSpaces();
+            string brandText = productElement.FindElements(By.XPath(string.Format(_attributeProductXPathLocator, "Brand"))).FirstOrDefault().Text.Replace("Brand:", "").Replace("&", "").UnescapeTextAndRemoveSpaces();
             product.Brand = Enum.TryParse(brandText, ignoreCase: true, out ProductBrand brand) ? (ProductBrand?)brand : null;
 
-            string categoryInfoText = ProductInformationPanel.FindElements(By.CssSelector("p")).FirstOrDefault().Text.Replace("Category: ", "").Replace("&","");
+            string categoryInfoText = productElement.FindElements(By.CssSelector("p")).FirstOrDefault().Text.Replace("Category: ", "").Replace("&","");
             string categoryUserTypetext = categoryInfoText.Split('>').First().UnescapeTextAndRemoveSpaces();
             string categorytext = categoryInfoText.Split('>').Last().UnescapeTextAndRemoveSpaces();
 

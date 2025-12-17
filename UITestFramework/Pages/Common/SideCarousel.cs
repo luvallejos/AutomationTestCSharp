@@ -9,20 +9,14 @@ namespace UITestFramework.Pages.Commons
 {
     public class SideCarousel
     {
-        #region Constants
-        private readonly IWebDriver _driver;
-        private const string _carouselIndicatorsListLocator = ".carousel-indicators li";
-        #endregion
-
-        #region Properties
-        public List<IWebElement> CarrouselIndicatorList => _driver.FindElements(By.CssSelector(_carouselIndicatorsListLocator)).ToList();
-
+        #region Private Variables
+        protected readonly IWebDriver _driver;
+        private static readonly By CarrouselIndicatorList = By.CssSelector(".carousel-indicators li");
         #endregion
 
         #region Constructors
         public SideCarousel(IWebDriver webDriver)
         {
-            _driver = webDriver;
         }
 
         #endregion
@@ -30,7 +24,8 @@ namespace UITestFramework.Pages.Commons
         #region Methods
         public IWebElement GetActiveIndicator()
         {
-            IWebElement activeIndic = CarrouselIndicatorList.Where(x => x.GetAttribute("class").Contains("active")).FirstOrDefault();
+            var carrrouselIndList = _driver.FindElements(CarrouselIndicatorList).ToList();
+            IWebElement activeIndic = carrrouselIndList.Where(x => x.GetAttribute("class").Contains("active")).FirstOrDefault();
             if (activeIndic != null)
             {
                 return activeIndic;
@@ -43,7 +38,8 @@ namespace UITestFramework.Pages.Commons
 
         public void SelectIndicatorByIndex(string index)
         {
-            IWebElement indicToSelect = CarrouselIndicatorList.Where(x => x.GetAttribute("data-slide-to").Equals(index)).First();
+            var carrrouselIndList = _driver.FindElements(CarrouselIndicatorList).ToList();
+            IWebElement indicToSelect = carrrouselIndList.Where(x => x.GetAttribute("data-slide-to").Equals(index)).First();
             if (indicToSelect != null)
             {
                 indicToSelect.Click();

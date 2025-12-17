@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UITestFramework.Dto;
+using UITestFramework.Utilities;
 
 namespace UITestFramework.Pages.Common
 {
     public class CartTable
     {
-        #region Constants
-        private readonly IWebDriver _driver;
-        private const string _tableLocator = "#cart_info_table";
+        #region Private Variables
+        protected readonly IWebDriver _driver;
+        private static readonly By CartTableElement = By.CssSelector("#cart_info_table");
         private const string _tableRowByIndex = "tr[id='product-{0}']";
         private const string _tableRowByProductNameXpathLocator = ".//a[contains(text(),'{0}')]//ancestor::tr";
         private const string _rowProductNameLocator = "td.cart_description a";
@@ -25,11 +26,10 @@ namespace UITestFramework.Pages.Common
 
         #region Properties
         public List<CartTableRow> Rows { get; private set; }
-        public IWebElement CartTableElement => _driver.FindElement(By.CssSelector(_tableLocator));
         #endregion
 
         #region Constructors
-        public CartTable(IWebDriver webDriver) 
+        public CartTable(IWebDriver webDriver)
         {
             _driver = webDriver;
             Rows = new List<CartTableRow>();
@@ -40,8 +40,8 @@ namespace UITestFramework.Pages.Common
         public List<CartTableRow> GetAllRowsOfTable()
         {
             Rows = new List<CartTableRow>();
-
-            List<IWebElement> rowElement = CartTableElement.FindElements(By.CssSelector("tbody tr")).ToList();
+            var cartTableEl = _driver.WaitUntilVisible(CartTableElement);
+            List<IWebElement> rowElement = cartTableEl.FindElements(By.CssSelector("tbody tr")).ToList();
 
             foreach (var row in rowElement)
             {
@@ -62,7 +62,8 @@ namespace UITestFramework.Pages.Common
 
         public void RemoveRowByIndex(int index)
         {
-            IWebElement rowElement = CartTableElement.FindElement(By.CssSelector(String.Format(_tableRowByIndex, index + 1)));
+            var cartTableEl = _driver.WaitUntilVisible(CartTableElement);
+            IWebElement rowElement = cartTableEl.FindElement(By.CssSelector(String.Format(_tableRowByIndex, index + 1)));
             rowElement.FindElement(By.CssSelector(_rowDeleteBtnLocator)).Click();
             Thread.Sleep(3000); //wait for row to be removed
 
@@ -71,7 +72,8 @@ namespace UITestFramework.Pages.Common
 
         public void RemoveRowByProductName(string productName)
         {
-            IWebElement rowElement = CartTableElement.FindElement(By.XPath(String.Format(_tableRowByProductNameXpathLocator, productName)));
+            var cartTableEl = _driver.WaitUntilVisible(CartTableElement);
+            IWebElement rowElement = cartTableEl.FindElement(By.XPath(String.Format(_tableRowByProductNameXpathLocator, productName)));
             rowElement.FindElement(By.CssSelector(_rowDeleteBtnLocator)).Click();
             Thread.Sleep(3000); //wait for row to be removed
 

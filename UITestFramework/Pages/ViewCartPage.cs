@@ -8,28 +8,22 @@ using UITestFramework.Utilities;
 
 namespace UITestFramework.Pages
 {
-    public class ViewCartPage
+    public class ViewCartPage : BasePage
     {
-        #region Constants
-        private readonly IWebDriver _driver;
-        private const string _cartPanelLocator = "#cart_info";
+        #region Private Variable
+        private static readonly By CartPanel = By.CssSelector("#cart_info");
+
         #endregion
 
         #region Properties
-        public Header Header { get; private set; }
         public BreadCrumbNavigation Navigation { get; private set; }
 
         public CartTable CartTable { get; private set; }
-
-        public IWebElement CartPanel => _driver.FindElement(By.CssSelector(_cartPanelLocator));
-
         #endregion
 
         #region Constructors
-        public ViewCartPage(IWebDriver webDriver)
+        public ViewCartPage(IWebDriver webDriver) : base(webDriver)
         {
-            _driver = webDriver;
-            Header = new Header(_driver);
             Navigation = new BreadCrumbNavigation(_driver);
             CartTable = new CartTable(_driver);
         }
@@ -37,7 +31,7 @@ namespace UITestFramework.Pages
         #region Methods
         public void waitUntilViewCartPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(_cartPanelLocator, "View Cart Page is not displayed");
+            _driver.WaitUntilVisible(CartPanel, "View Cart Page is not displayed");
         }
 
         public List<Product> GetAllProductsInCart() { 

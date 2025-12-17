@@ -7,15 +7,9 @@ namespace UITestFramework.Pages
 {
     public class ProductsPage : BasePage
     {
-        #region Constants
-        private const string _searchProductsInputLocator = "#search_product";
-        private const string _searchProductsSubmitBtnLocator = "#submit_search";
-        #endregion
-
-        #region Properties
-        public IWebElement SearchProductsTextBox => _driver.FindElement(By.CssSelector(_searchProductsInputLocator));
-        public IWebElement SearchProductsSubmitBtn => _driver.FindElement(By.CssSelector(_searchProductsSubmitBtnLocator));
-
+        #region Private Variables
+        private static readonly By SearchProductsInput = By.CssSelector("#search_product");
+        private static readonly By SearchProductsSubmitBtn = By.CssSelector("#submit_search");
         #endregion
 
         #region Constructors
@@ -25,17 +19,17 @@ namespace UITestFramework.Pages
         #endregion
 
         #region Methods
-        public void waitUntilProductsPageDisplayed()
+        public void WaitUntilProductsPageDisplayed()
         {
-            _driver.WaitUntilDisplayed(_searchProductsInputLocator, "Product Page is not displayed");
+            _driver.WaitUntilVisible(SearchProductsInput, "Product Page is not displayed");
         }
 
         public void SearchProduct(string input)
         {
-            _driver.ScrollToElement(SearchProductsTextBox);
-            SearchProductsTextBox.SendKeys(input);
+            _driver.ScrollToElement(SearchProductsInput);
+            _driver.Type(SearchProductsInput, input);
             _driver.ScrollToElement(SearchProductsSubmitBtn);
-            SearchProductsSubmitBtn.Click();
+            _driver.Click(SearchProductsSubmitBtn);
             FeaturedItems.VerifyTitleIsDisplayed("Searched Products");
         }
 
@@ -73,7 +67,7 @@ namespace UITestFramework.Pages
             {
                 AddProductToCartByProductName(productName);
                 AddedToCartModal.ClickContinueShopping();
-                SearchProductsTextBox.Clear();
+                _driver.WaitUntilVisible(SearchProductsInput).Clear();
             }
         }
 

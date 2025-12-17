@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using UITestFramework.Dto;
 using UITestFramework.Utilities;
@@ -13,11 +12,12 @@ namespace UITestFramework.Pages.Commons
 {
     public class FeaturedItems
     {
-        #region Constants
-        private readonly IWebDriver _driver;
+        #region Private Variables
+        protected readonly IWebDriver _driver;
         private const string _baseURL = @"https://automationexercise.com";
-        private const string _titleLocator = "div.features_items h2";
-        private const string _featuredItemsSectionLocator = ".features_items";
+        private static readonly By Title = By.CssSelector("div.features_items h2");
+        private static readonly By FeaturedItemsSection = By.CssSelector(".features_items");
+
         private const string _productListFromFeaturedItemsSectionLocator = "div.single-products";
         private const string _productElementFromFeaturedItemsSectionLocator = "div.product-image-wrapper";
         private const string _addProductToCartBtnLocator = "a[class~='add-to-cart']";
@@ -25,9 +25,6 @@ namespace UITestFramework.Pages.Commons
 
         #region Properties
         public BreadCrumbNavigation BreadCrumbNavigation { get; private set; }
-        public IWebElement Title => _driver.FindElement(By.CssSelector(_titleLocator));
-        public IWebElement FeaturedItemsSection => _driver.FindElement(By.CssSelector(_featuredItemsSectionLocator));
-
         #endregion
 
         #region Constructors
@@ -38,15 +35,20 @@ namespace UITestFramework.Pages.Commons
         }
         #endregion
         #region Methods
+        public bool IsFeaturedItemSectionDisplayed() 
+        {
+            return _driver.WaitUntilVisible(FeaturedItemsSection) != null ? true : false;
+        }
+
         public void VerifyTitleIsDisplayed(string title)
         {
-            _driver.WaitUntilDisplayed(_titleLocator, "Title is not displayed");
-            ClassicAssert.IsTrue(Title.Text.ToLower().Contains(title.ToLower()), $"The featured items title is not as expected. Expected: '{title}', Actual: '{Title.Text.Trim()}'");
+            ClassicAssert.IsTrue(_driver.WaitUntilVisible(Title).Text.ToLower().Contains(title.ToLower()), $"The featured items title is not as expected. Expected: '{title}', Actual: '{_driver.WaitUntilVisible(Title).Text.Trim()}'");
         }
 
         public List<Product> GetListOfDisplayedProducts()
         {
-            List<IWebElement> products = FeaturedItemsSection.FindElements(By.CssSelector(_productListFromFeaturedItemsSectionLocator)).ToList();
+            var featuredSectionElement = _driver.WaitUntilVisible(FeaturedItemsSection);
+            List <IWebElement> products = featuredSectionElement.FindElements(By.CssSelector(_productListFromFeaturedItemsSectionLocator)).ToList();
 
             ClassicAssert.IsNotNull(products, "No products Displayed.");
 
@@ -61,7 +63,8 @@ namespace UITestFramework.Pages.Commons
 
         public IWebElement GetWebElementProductByName(string productName)
         {
-            List<IWebElement> products = FeaturedItemsSection.FindElements(By.CssSelector(_productElementFromFeaturedItemsSectionLocator)).ToList();
+            var featuredSectionElement = _driver.WaitUntilVisible(FeaturedItemsSection);
+            List<IWebElement> products = featuredSectionElement.FindElements(By.CssSelector(_productElementFromFeaturedItemsSectionLocator)).ToList();
             IWebElement product = null;
 
             foreach (var prod in products)
