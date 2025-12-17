@@ -13,10 +13,9 @@ namespace UITestFramework.Pages
         private static readonly By PasswordInput = By.CssSelector("input[name='password']");
         private static readonly By LoginBtn = By.CssSelector("button[data-qa='login-button']");
         private static readonly By LoginError = By.XPath(".//p[contains(.,'incorrect')]");
-        private static readonly By SignUpPanel = By.CssSelector(".signup-form");
         private static readonly By NameSignUpInput = By.CssSelector("input[data-qa='signup-name']");
         private static readonly By EmailSignUpInput = By.CssSelector("input[data-qa='signup-email']");
-        private static readonly By SubmitSignUpBtn = By.CssSelector("input[data-qa='signup-button']");
+        private static readonly By SubmitSignUpBtn = By.CssSelector("button[data-qa='signup-button']");
 
         #endregion
 
@@ -55,6 +54,7 @@ namespace UITestFramework.Pages
             _driver.Type(NameSignUpInput, name);
             _driver.Type(EmailSignUpInput, email);
             _driver.Click(SubmitSignUpBtn);
+            Thread.Sleep(3000); //wait for redirect to SignUp page
             SignUpPage signUpPage = new SignUpPage(_driver);
             signUpPage.WaitUntilSignUpPageDisplayed();
             return signUpPage;

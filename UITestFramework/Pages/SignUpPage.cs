@@ -69,9 +69,9 @@ namespace UITestFramework.Pages
             _driver.Type(PasswordInput, userData.Password);
 
             var birthDay = userData.BirthDay.Split('_');
-            _driver.Type(DayBirthdaySelector, birthDay[2]);
-            _driver.Type(MonthBirthdaySelector, MonthBirthdayMapping[birthDay[1]]);
-            _driver.Type(YearBirthdaySelector, birthDay[0]);
+            _driver.Select(DayBirthdaySelector, birthDay[2]);
+            _driver.Select(MonthBirthdaySelector, MonthBirthdayMapping[birthDay[1]]);
+            _driver.Select(YearBirthdaySelector, birthDay[0]);
             _driver.Type(FirstNameInput, userData.FirstName);
 
             _driver.Type(FirstNameInput,userData.FirstName);
@@ -79,7 +79,7 @@ namespace UITestFramework.Pages
             _driver.Type(CompanyInput, userData.Company);
             _driver.Type(AddressInput, userData.Address);
 
-            _driver.Type(CountrySelector, userData.Country);
+            _driver.Select(CountrySelector, userData.Country);
             _driver.Type(StateInput, userData.State);
             _driver.Type(CityInput, userData.City);
             _driver.Type(ZipCodeInput, userData.Zipcode);

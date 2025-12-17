@@ -26,6 +26,12 @@ namespace UITestFramework.Utilities
             element.SendKeys(text);
         }
 
+        public static void Select(this IWebDriver driver, By locator, string text)
+        {
+            var element = driver.WaitUntilVisible(locator);
+            element.SendKeys(text);
+        }
+
         public static void Click(this IWebDriver driver, By locator)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
