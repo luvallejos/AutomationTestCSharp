@@ -59,7 +59,7 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: "Publish UI test evidence"
-  condition: always()
+  condition: failed()
   inputs:
     PathtoPublish: '$(Build.SourcesDirectory)/AutomationTestCSharp/bin/$(buildConfiguration)/artifacts'
     ArtifactName: 'ui-test-evidence'
