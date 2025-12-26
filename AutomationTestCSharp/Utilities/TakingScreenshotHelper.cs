@@ -23,11 +23,19 @@ namespace AutomationTestCSharp.Utilities
 
             var fullPath = Path.Combine(screenshotsDir, fileName);
 
-            var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot.SaveAsFile(fullPath, ScreenshotImageFormat.Png);
+            try 
+            {
+                var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                screenshot.SaveAsFile(fullPath, ScreenshotImageFormat.Png);
 
-            TestContext.WriteLine($"Screenshot guardada en: {fullPath}");
-            TestContext.AddTestAttachment(fullPath, "Screenshot al fallar");
+                TestContext.WriteLine($"Screenshot guardada en: {fullPath}");
+                TestContext.AddTestAttachment(fullPath, "Screenshot al fallar");
+            }
+            catch (Exception) 
+            { 
+
+            }
+
         }
 
         private static string SanitizeFileName(string name)
