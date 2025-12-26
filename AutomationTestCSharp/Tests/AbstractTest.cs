@@ -1,4 +1,5 @@
 ﻿using AutomationTestCSharp.Utilities;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -80,6 +81,7 @@ namespace AutomationExercise.Tests
             ChromeOptions options = new ChromeOptions();
             options.AddArgument("--start-maximized"); // open browser in maximized mode
             options.AddArgument("--disable-infobars"); // disabling infobars
+            options.SetLoggingPreference(LogType.Browser, LogLevel.All); //saving logs for browser
 
             driver = new ChromeDriver(options);
             driver.Manage().Window.Size = new Size(1920, 1080);
@@ -104,7 +106,28 @@ namespace AutomationExercise.Tests
 
         public void Cleanup(IWebDriver driver)
         {
-            driver.Quit();
+            try
+            {
+                var status = TestContext.CurrentContext.Result.Outcome.Status;
+
+                if (status == NUnit.Framework.Interfaces.TestStatus.Failed)
+                {
+                    var testName = TestContext.CurrentContext.Test.Name;
+                    var safeName = string.Join("_", testName.Split(Path.GetInvalidFileNameChars()));
+
+                    var root = Path.Combine(TestContext.CurrentContext.WorkDirectory, "artifacts", safeName);
+
+                    TestLoggerHelper.SaveOnFailure(driver, root);
+
+                    TestContext.AddTestAttachment(Path.Combine(root, "currentUrl.txt"));
+                    TestContext.AddTestAttachment(Path.Combine(root, "browserConsole.log"));
+                    TestContext.AddTestAttachment(Path.Combine(root, "pageSource.html"));
+                }
+            }
+            finally
+            {
+                try { driver?.Quit(); } catch {}
+            }
         }
 
         #endregion

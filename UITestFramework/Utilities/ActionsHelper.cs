@@ -82,11 +82,12 @@ namespace UITestFramework.Utilities
         {
             var overlays = new[]
             {
-        By.CssSelector(".modal-backdrop"),
-        By.CssSelector(".overlay"),
-        By.CssSelector(".loading"),
-        By.CssSelector(".spinner")
-        };
+            By.CssSelector(".modal-backdrop"),
+            By.CssSelector(".overlay"),
+            By.CssSelector(".loading"),
+            By.CssSelector(".spinner")
+            };
+
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
             foreach (var overlay in overlays)

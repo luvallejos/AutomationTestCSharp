@@ -57,6 +57,14 @@ steps:
     ArtifactName: 'Screenshots'
     publishLocation: 'Container'    
 
+- task: PublishBuildArtifacts@1
+  displayName: "Publish UI test evidence"
+  condition: always()
+  inputs:
+    PathtoPublish: '$(Build.SourcesDirectory)/AutomationTestCSharp/bin/$(buildConfiguration)/artifacts'
+    ArtifactName: 'ui-test-evidence'
+    publishLocation: 'Container'
+
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'VSTest'

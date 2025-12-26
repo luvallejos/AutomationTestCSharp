@@ -59,6 +59,7 @@
     <Compile Include="Utilities\DeleteUserAccountHelper.cs" />
     <Compile Include="Utilities\ResourcesUtilities.cs" />
     <Compile Include="Utilities\TakingScreenshotHelper.cs" />
+    <Compile Include="Utilities\TestLoggerHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
