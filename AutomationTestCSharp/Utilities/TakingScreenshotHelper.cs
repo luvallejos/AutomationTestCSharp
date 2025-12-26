@@ -35,7 +35,6 @@ namespace AutomationTestCSharp.Utilities
             { 
 
             }
-
         }
 
         private static string SanitizeFileName(string name)
