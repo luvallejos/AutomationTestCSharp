@@ -115,7 +115,7 @@ namespace AutomationExercise.Tests
                     var testName = TestContext.CurrentContext.Test.Name;
                     var safeName = string.Join("_", testName.Split(Path.GetInvalidFileNameChars()));
 
-                    var root = Path.Combine(TestContext.CurrentContext.WorkDirectory, "artifacts", safeName);
+                    var root = Path.Combine(TestContext.CurrentContext.WorkDirectory, "artifacts");
 
                     TestLoggerHelper.SaveOnFailure(driver, root);
 
